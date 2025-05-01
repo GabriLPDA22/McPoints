@@ -14,15 +14,9 @@
 
 </div>
 
-## ✨ Visión General
-
-**McPoints** revoluciona la forma de coleccionar números promocionales con una interfaz potente y elegante. Una aplicación independiente creada por coleccionistas, para coleccionistas.
-
 <div align="center">
 
-```
-📲 DESCARGA DIRECTA - INSTALACIÓN MANUAL 📲
-```
+📱 DESCARGA DIRECTA - INSTALACIÓN MANUAL 📱
 
 ### [⬇️ Descargar APK v1.0.0](https://link-a-tu-archivo-apk)
 
@@ -31,42 +25,9 @@
 ## 📱 Interfaz Elegante y Moderna
 
 <div align="center">
-  <div style="
-    background: linear-gradient(145deg, #2d2d2d, #1d1d1d);
-    border-radius: 30px;
-    padding: 12px;
-    display: inline-block;
-    border: 8px solid #222;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 6px #111;
-    position: relative;
-    max-width: 280px;
-    margin: 20px 0;
-  ">
-    <div style="
-      width: 120px;
-      height: 20px;
-      background: #111;
-      border-radius: 20px;
-      margin: 0 auto 10px;
-    "></div>
-    <img src="Docs/images/ScreenShot.jpg" alt="McPoints Interface" style="
-      border-radius: 18px;
-      width: 100%;
-      display: block;
-      border: 1px solid #333;
-    ">
-    <div style="
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 4px solid #222;
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #111;
-    "></div>
-  </div>
+  <kbd>
+    <img src="Docs/images/ScreenShot.jpg" alt="McPoints Interface" width="270px">
+  </kbd>
 </div>
 
 ## 📥 Instalación

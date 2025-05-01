@@ -1,42 +1,29 @@
-import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React from "react";
+import "../styles/NumberItem.css";
 
 const NumberItem = ({ number, isCollected, onToggle }) => {
   return (
-    <TouchableOpacity 
-      style={[styles.container, isCollected && styles.collected]} 
-      onPress={onToggle}
+    <button
+      className={`number-item ${isCollected ? "collected" : ""}`}
+      onClick={onToggle}
     >
-      <Text style={[styles.text, isCollected && styles.collectedText]}>
-        {number}
-      </Text>
-    </TouchableOpacity>
+      {isCollected && (
+        <span className="check-icon">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </span>
+      )}
+      <span className="number-text">{number}</span>
+    </button>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    margin: 5,
-    padding: 20,
-    backgroundColor: '#f0f0f0',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ddd',
-  },
-  collected: {
-    backgroundColor: '#4CAF50',
-    borderColor: '#388E3C',
-  },
-  text: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  collectedText: {
-    color: 'white',
-  },
-});
 
 export default NumberItem;

@@ -1,60 +1,36 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React from "react";
+import { Grid, Check, Clock } from "lucide-react";
+import "../styles/FilterTabs.css";
 
 const FilterTabs = ({ currentFilter, onFilterChange }) => {
   const filters = [
-    { key: 'all', label: 'Todos' },
-    { key: 'collected', label: 'Coleccionados' },
-    { key: 'missing', label: 'Pendientes' },
+    { key: "all", label: "Todos", icon: Grid },
+    { key: "collected", label: "Coleccionados", icon: Check },
+    { key: "missing", label: "Pendientes", icon: Clock },
   ];
-  
+
   return (
-    <View style={styles.container}>
-      {filters.map(filter => (
-        <TouchableOpacity
-          key={filter.key}
-          style={[
-            styles.tab,
-            currentFilter === filter.key && styles.activeTab
-          ]}
-          onPress={() => onFilterChange(filter.key)}
-        >
-          <Text style={[
-            styles.tabText,
-            currentFilter === filter.key && styles.activeTabText
-          ]}>
-            {filter.label}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </View>
+    <div className="filter-tabs">
+      {filters.map((filter) => {
+        const FilterIcon = filter.icon;
+        return (
+          <button
+            key={filter.key}
+            className={`filter-tab ${
+              currentFilter === filter.key ? "active" : ""
+            }`}
+            onClick={() => onFilterChange(filter.key)}
+          >
+            <FilterIcon className="filter-icon" />
+            <span className="tab-label">{filter.label}</span>
+            {currentFilter === filter.key && (
+              <span className="active-indicator" />
+            )}
+          </button>
+        );
+      })}
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 10,
-    backgroundColor: '#fff',
-  },
-  tab: {
-    flex: 1,
-    padding: 12,
-    alignItems: 'center',
-    borderRadius: 6,
-    marginHorizontal: 5,
-    backgroundColor: '#f0f0f0',
-  },
-  activeTab: {
-    backgroundColor: '#E53935',
-  },
-  tabText: {
-    fontWeight: 'bold',
-  },
-  activeTabText: {
-    color: '#fff',
-  },
-});
 
 export default FilterTabs;

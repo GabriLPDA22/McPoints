@@ -1,14 +1,18 @@
 :root {
-  --primary: #ff5252;
-  --primary-dark: #d50000;
+  --primary: #e53935;
+  --primary-light: #ff6f60;
+  --primary-dark: #b71c1c;
   --secondary: #ffab00;
-  --background: #1e1e1e;
-  --card-bg: #2d2d2d;
+  --background: #121212;
+  --card-bg: #1e1e1e;
+  --card-bg-light: #2d2d2d;
   --text: #ffffff;
   --text-secondary: #bbbbbb;
   --success: #00e676;
+  --border-radius-sm: 8px;
   --border-radius: 12px;
-  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  --border-radius-lg: 16px;
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   --transition: all 0.3s ease;
 }
 
@@ -30,6 +34,12 @@ body {
   height: 100vh;
   margin: 0 auto;
   overflow-x: hidden;
+  background: linear-gradient(
+    to bottom,
+    var(--background),
+    #1a1a1a 50%,
+    #240000
+  );
 }
 
 button {
@@ -43,6 +53,9 @@ button {
   font-size: 16px;
   box-shadow: 0 4px 10px rgba(213, 0, 0, 0.3);
   transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button:hover {
@@ -59,12 +72,32 @@ input {
   border: 2px solid #444;
   border-radius: var(--border-radius);
   color: var(--text);
-  padding: 12px 15px;
+  padding: 16px;
+  font-size: 16px;
   transition: var(--transition);
+  width: 100%;
 }
 
 input:focus {
   border-color: var(--primary);
   outline: none;
   box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.3);
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--card-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-dark);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }

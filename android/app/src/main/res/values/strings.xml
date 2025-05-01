@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MacPoints</string>
+    <string name="title_activity_main">MacPoints</string>
+    <string name="package_name">com.yourname.macpoints</string>
+    <string name="custom_url_scheme">com.yourname.macpoints</string>
+</resources>

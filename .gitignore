@@ -1,0 +1,109 @@
+# Dependencias
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Producción
+/build
+/dist
+/android/app/build
+/android/build
+/ios/build
+
+# Capacitor
+/android/capacitor-cordova-android-plugins
+/ios/capacitor-cordova-ios-plugins
+/ios/App/public
+/android/app/src/main/assets/public
+
+# Archivos del sistema
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs
+*.log
+
+# Editor y IDE
+/.idea
+/.vscode
+*.swp
+*.swo
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# Android/IntelliJ
+.idea
+.gradle
+local.properties
+*.iml
+*.iws
+*.ipr
+
+# Android específicos
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+/android/keystore.properties
+/android/*.keystore
+/android/*.jks
+
+# iOS específicos
+/ios/Pods/
+/ios/App/Pods/
+/ios/App/xcuserdata/
+xcuserdata/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+.xccheckout
+*.moved-aside
+*.xcuserstate
+*.xcworkspace
+
+# Archivos temporales
+.tmp
+.temp
+
+# Archivos de configuración del sistema
+.directory
+*~
+
+# Cache de TypeScript
+*.tsbuildinfo
+
+# Archivos de entorno excepto los de ejemplo
+.env
+.env.*
+!.env.example
+
+# Archivos de cachés
+.eslintcache
+.stylelintcache
+.capacitor
+
+# Carpeta caché de PWA
+/public/workbox-*.js
+/public/sw.js

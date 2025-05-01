@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="Docs/images/logo.webp" alt="McPoints" width="150">
+<img src="Docs/images/Logo.webp" alt="McPoints" width="150">
 
 **La mejor app para coleccionar números promocionales de McDonald's**
 
@@ -18,7 +18,7 @@
 
 📱 DESCARGA DIRECTA - INSTALACIÓN MANUAL 📱
 
-### [⬇️ Descargar APK v1.0.0](https://link-a-tu-archivo-apk)
+### [⬇️ Descargar APK v1.0.0]([https://link-a-tu-archivo-apk](https://github.com/GabriLPDA22/mcpoints/releases/download/v1.0.0/mcpoints-v1.0.0.apk)
 
 </div>
 

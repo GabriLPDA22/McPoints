@@ -113,6 +113,10 @@ Si te gusta la aplicación, comparte el APK con otros coleccionistas.
 
 ---
 
+## 📝 Licencia
+
+Este proyecto está licenciado bajo la Licencia MIT - consulta el archivo [LICENSE.md](./LICENSE.md) para más detalles.
+
 *McPoints - Creado por coleccionistas, para coleccionistas.*
 
 </div>

@@ -1,9 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import localforage from 'localforage';
 
 export const saveData = async (key, value) => {
   try {
-    const jsonValue = JSON.stringify(value);
-    await AsyncStorage.setItem(key, jsonValue);
+    await localforage.setItem(key, value);
     return true;
   } catch (error) {
     console.error('Error saving data', error);
@@ -13,8 +12,8 @@ export const saveData = async (key, value) => {
 
 export const loadData = async (key) => {
   try {
-    const jsonValue = await AsyncStorage.getItem(key);
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
+    const value = await localforage.getItem(key);
+    return value;
   } catch (error) {
     console.error('Error loading data', error);
     return null;
@@ -23,7 +22,7 @@ export const loadData = async (key) => {
 
 export const removeData = async (key) => {
   try {
-    await AsyncStorage.removeItem(key);
+    await localforage.removeItem(key);
     return true;
   } catch (error) {
     console.error('Error removing data', error);

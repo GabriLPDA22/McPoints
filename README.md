@@ -2,13 +2,13 @@
 
 <div align="center">
 
-<img src="Docs/images/Logo.webp" alt="McPoints" width="150">
+<img src="Docs/images/logo.webp" alt="McPoints" width="150">
 
 **La mejor app para coleccionar números promocionales de McDonald's**
 
-[![Versión](https://img.shields.io/badge/Versión-1.0.0-brightgreen.svg)](https://github.com/yourusername/mcpoints)
+[![Versión](https://img.shields.io/badge/Versión-1.0.0-brightgreen.svg)](https://github.com/yourusername/mcpoints/releases/tag/v1.0.0)
 [![Plataforma](https://img.shields.io/badge/Plataforma-Android-green.svg)](https://github.com/yourusername/mcpoints)
-[![Distribución](https://img.shields.io/badge/Distribución-Independiente-orange.svg)](https://github.com/yourusername/mcpoints)
+[![Distribución](https://img.shields.io/badge/Distribución-Independiente-orange.svg)](https://github.com/yourusername/mcpoints/releases)
 
 ---
 
@@ -18,7 +18,7 @@
 
 📱 DESCARGA DIRECTA - INSTALACIÓN MANUAL 📱
 
-### [⬇️ Descargar APK v1.0.0]([https://github.com/GabriLPDA22/mcpoints/releases/download/v1.0.0/mcpoints-v1.0.0.apk])
+### [⬇️ Descargar APK v1.0.0](https://github.com/GabriLPDA22/mcpoints/releases/download/v1.0.0/mcpoints-v1.0.0.apk)
 
 </div>
 
@@ -63,6 +63,32 @@
     </td>
   </tr>
 </table>
+
+## 📷 Escaneo de Tickets
+
+<div align="center">
+
+Usa la **función de escaneo** para añadir números automáticamente a tu colección.
+
+</div>
+
+## 🌈 Experiencia Visual Extraordinaria
+
+```
+┌─────────────────────────────────────────────────┐
+│                                                 │
+│   ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐     │
+│   │000│ │001│ │002│ │003│ │004│ │005│ │006│ ... │
+│   └───┘ └───┘ └───┘ └───┘ └───┘ └───┘ └───┘     │
+│                                                 │
+│   ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐     │
+│   │007│ │008│ │009│ │010│ │011│ │012│ │013│ ... │
+│   └───┘ └───┘ └───┘ └───┘ └───┘ └───┘ └───┘     │
+│                                                 │
+│   ... visualización de cuadrícula completa ...  │
+│                                                 │
+└─────────────────────────────────────────────────┘
+```
 
 ## 💎 Tecnología Destacada
 

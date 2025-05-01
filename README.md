@@ -1,14 +1,14 @@
-# 🍟 MacPoints 🍔
+# 🍟 McPoints 🍔
 
 <div align="center">
 
-<img src="/Docs/images/logo.webp" alt="MacPoints" width="150">
+<img src="Docs/images/logo.webp" alt="McPoints" width="150">
 
 **La mejor app para coleccionar números promocionales de McDonald's**
 
-[![Versión](https://img.shields.io/badge/Versión-1.0.0-brightgreen.svg)](https://github.com/yourusername/macpoints)
-[![Plataforma](https://img.shields.io/badge/Plataforma-Android-green.svg)](https://github.com/yourusername/macpoints)
-[![Distribución](https://img.shields.io/badge/Distribución-Independiente-orange.svg)](https://github.com/yourusername/macpoints)
+[![Versión](https://img.shields.io/badge/Versión-1.0.0-brightgreen.svg)](https://github.com/yourusername/mcpoints)
+[![Plataforma](https://img.shields.io/badge/Plataforma-Android-green.svg)](https://github.com/yourusername/mcpoints)
+[![Distribución](https://img.shields.io/badge/Distribución-Independiente-orange.svg)](https://github.com/yourusername/mcpoints)
 
 ---
 
@@ -16,7 +16,7 @@
 
 ## ✨ Visión General
 
-**MacPoints** revoluciona la forma de coleccionar números promocionales con una interfaz potente y elegante. Una aplicación independiente creada por coleccionistas, para coleccionistas.
+**McPoints** revoluciona la forma de coleccionar números promocionales con una interfaz potente y elegante. Una aplicación independiente creada por coleccionistas, para coleccionistas.
 
 <div align="center">
 
@@ -24,11 +24,54 @@
 📲 DESCARGA DIRECTA - INSTALACIÓN MANUAL 📲
 ```
 
+### [⬇️ Descargar APK v1.0.0](https://link-a-tu-archivo-apk)
+
+</div>
+
+## 📱 Interfaz Elegante y Moderna
+
+<div align="center">
+  <div style="
+    background: linear-gradient(145deg, #2d2d2d, #1d1d1d);
+    border-radius: 30px;
+    padding: 12px;
+    display: inline-block;
+    border: 8px solid #222;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 6px #111;
+    position: relative;
+    max-width: 280px;
+    margin: 20px 0;
+  ">
+    <div style="
+      width: 120px;
+      height: 20px;
+      background: #111;
+      border-radius: 20px;
+      margin: 0 auto 10px;
+    "></div>
+    <img src="Docs/images/screenshot.jpg" alt="McPoints Interface" style="
+      border-radius: 18px;
+      width: 100%;
+      display: block;
+      border: 1px solid #333;
+    ">
+    <div style="
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 4px solid #222;
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111;
+    "></div>
+  </div>
 </div>
 
 ## 📥 Instalación
 
-1. **Descarga el archivo APK** desde el enlace proporcionado
+1. **Descarga el archivo APK** desde el enlace proporcionado arriba
 2. **Habilita "Orígenes desconocidos"** en la configuración de seguridad de tu dispositivo
 3. **Abre el archivo APK** y sigue las instrucciones para instalar
 4. **¡Listo!** Comienza a registrar tu colección inmediatamente
@@ -60,24 +103,6 @@
   </tr>
 </table>
 
-## 🌈 Experiencia Visual Extraordinaria
-
-```
-┌─────────────────────────────────────────────────┐
-│                                                 │
-│   ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐     │
-│   │000│ │001│ │002│ │003│ │004│ │005│ │006│ ... │
-│   └───┘ └───┘ └───┘ └───┘ └───┘ └───┘ └───┘     │
-│                                                 │
-│   ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐     │
-│   │007│ │008│ │009│ │010│ │011│ │012│ │013│ ... │
-│   └───┘ └───┘ └───┘ └───┘ └───┘ └───┘ └───┘     │
-│                                                 │
-│   ... visualización de cuadrícula completa ...  │
-│                                                 │
-└─────────────────────────────────────────────────┘
-```
-
 ## 💎 Tecnología Destacada
 
 <div align="center">
@@ -86,7 +111,7 @@
 |:-------------:|:-------------|
 | **⚡ Rendimiento Máximo** | Optimizada para respuesta instantánea incluso con colecciones completas |
 | **🔄 Datos Locales** | Tu progreso se guarda localmente en tu dispositivo |
-| **🔐 Modo Rápido** | Añade múltiples números consecutivamente sin esfuerzo |
+| **📷 Escaneo de Tickets** | Captura los números promocionales directamente con la cámara |
 | **💯 Sin Dependencias** | No requiere registro ni conexión a internet |
 
 </div>
@@ -102,7 +127,7 @@
 
 - Android 6.0 o superior
 - 50MB de espacio de almacenamiento
-- No requiere permisos especiales ni conexión a internet
+- Cámara (opcional, para escaneo de tickets)
 
 ## ⚠️ Importante
 
@@ -113,12 +138,12 @@
 
 <div align="center">
 
-## 💫 Comparte MacPoints
+## 💫 Comparte McPoints
 
 Si te gusta la aplicación, comparte el APK con otros coleccionistas.
 
 ---
 
-*MacPoints - Creado por coleccionistas, para coleccionistas.*
+*McPoints - Creado por coleccionistas, para coleccionistas.*
 
 </div>

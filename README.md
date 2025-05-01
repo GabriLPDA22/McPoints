@@ -49,7 +49,7 @@
       border-radius: 20px;
       margin: 0 auto 10px;
     "></div>
-    <img src="Docs/images/screenshot.jpg" alt="McPoints Interface" style="
+    <img src="Docs/images/ScreenShot.jpg" alt="McPoints Interface" style="
       border-radius: 18px;
       width: 100%;
       display: block;

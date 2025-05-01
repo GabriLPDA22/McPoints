@@ -107,3 +107,16 @@ xcuserdata/
 # Carpeta caché de PWA
 /public/workbox-*.js
 /public/sw.js
+
+# Archivos Android específicos
+/android/app/src/main/res/drawable*
+/android/app/src/main/res/values*
+/android/app/src/main/res/mipmap*
+/android/*.xml
+/android/**/*.xml
+/android/**/*.png
+/android/**/*.java
+/android/**/*.properties
+/android/**/*.gradle
+/android/**/*.pro
+android/

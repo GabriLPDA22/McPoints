@@ -32,12 +32,20 @@
 
 ## 📥 Instalación
 
-1. **Descarga el archivo APK** desde el enlace proporcionado arriba
-2. **Habilita "Orígenes desconocidos"** en la configuración de seguridad de tu dispositivo
-3. **Abre el archivo APK** y sigue las instrucciones para instalar
-4. **¡Listo!** Comienza a registrar tu colección inmediatamente
+1.  **Descarga el archivo APK** desde el enlace proporcionado arriba.
+2.  **Habilita "Orígenes desconocidos"** (o "Instalar apps desconocidas") en la configuración de seguridad de tu dispositivo Android.
+3.  **Abre el archivo APK descargado** y sigue las instrucciones en pantalla para instalar la aplicación.
+4.  **¡Listo!** Abre McPoints y comienza a registrar tu colección inmediatamente.
 
-> **Nota**: Esta aplicación no está disponible en Google Play ni App Store. Solo se distribuye de forma independiente.
+> **⚠️ Advertencia de Seguridad Importante ⚠️**
+>
+> La aplicación **no posee un certificado digital**, por lo que durante la instalación, tu dispositivo Android puede mostrar una advertencia indicando un posible peligro o riesgo.
+>
+> Aunque aseguramos que la aplicación es segura (y puedes verificar el código fuente en este repositorio de GitHub si está disponible), la instalación de archivos APK de fuentes no oficiales siempre conlleva riesgos.
+>
+> **La instalación se realiza bajo tu propia responsabilidad.** Te recomendamos encarecidamente, por seguridad, verificar el archivo APK descargado utilizando servicios en línea como [VirusTotal](https://www.virustotal.com/) o [Koodous](https://koodous.com/) antes de proceder con la instalación.
+
+> **Nota**: Esta aplicación no está disponible en Google Play ni App Store. Su distribución es exclusivamente independiente a través del archivo APK.
 
 ## 🚀 Características Espectaculares
 
@@ -55,20 +63,20 @@
   <tr>
     <td width="50%">
       <h3>🔍 Búsqueda Instantánea</h3>
-      <p>Localiza cualquier número en segundos con nuestro potente sistema de búsqueda y filtrado avanzado.</p>
+      <p>Localiza cualquier número en segundos con nuestro potente sistema de búsqueda y filtrado avanzado (todos, conseguidos, pendientes).</p>
     </td>
     <td width="50%">
       <h3>💾 Guardado Local Seguro</h3>
-      <p>Tu colección siempre está a salvo con guardado automático y opciones de exportación e importación.</p>
+      <p>Tu colección siempre está a salvo en tu dispositivo con guardado automático y opciones de exportación e importación.</p>
     </td>
   </tr>
 </table>
 
-## 📷 Escaneo de Tickets
+## 📷 Escaneo de Tickets (Opcional)
 
 <div align="center">
 
-Usa la **función de escaneo** para añadir números automáticamente a tu colección.
+Usa la **función de escaneo** integrada para añadir números automáticamente a tu colección capturándolos desde los tickets con la cámara de tu dispositivo.
 
 </div>
 
@@ -76,46 +84,48 @@ Usa la **función de escaneo** para añadir números automáticamente a tu colec
 
 <div align="center">
 
-| Característica | Descripción |
-|:-------------:|:-------------|
-| **⚡ Rendimiento Máximo** | Optimizada para respuesta instantánea incluso con colecciones completas |
-| **🔄 Datos Locales** | Tu progreso se guarda localmente en tu dispositivo |
-| **📷 Escaneo de Tickets** | Captura los números promocionales directamente con la cámara |
-| **💯 Sin Dependencias** | No requiere registro ni conexión a internet |
+| Característica         | Descripción                                                          |
+| :--------------------- | :------------------------------------------------------------------- |
+| **⚡ Rendimiento Máximo** | Optimizada para respuesta instantánea incluso con colecciones grandes. |
+| **🔄 Datos Locales** | Tu progreso se guarda exclusivamente en tu dispositivo.               |
+| **📷 Escaneo de Tickets** | Captura números promocionales directamente con la cámara (opcional). |
+| **💯 Sin Dependencias** | No requiere registro, inicio de sesión ni conexión a internet.       |
 
 </div>
 
 ## 🎨 Diseño Intuitivo
 
-- **Interfaz Moderna**: Sistema de diseño elegante y funcional
-- **Navegación Simple**: Accede a cualquier función con máximo 2 toques
-- **Filtros Potentes**: Visualiza tus números como prefieras: todos, conseguidos o pendientes
-- **Totalmente Personalizable**: Adapta la experiencia a tus necesidades
+-   **Interfaz Moderna**: Sistema de diseño elegante y funcional.
+-   **Navegación Simple**: Accede a cualquier función con un máximo de 2 toques.
+-   **Filtros Potentes**: Visualiza tus números como prefieras: todos, conseguidos o pendientes.
+-   **Totalmente Personalizable**: Adapta la experiencia a tus necesidades (si aplica).
 
-## 🔧 Requisitos
+## 🔧 Requisitos del Sistema
 
-- Android 6.0 o superior
-- 50MB de espacio de almacenamiento
-- Cámara (opcional, para escaneo de tickets)
+-   **Sistema Operativo**: Android 6.0 (Marshmallow) o superior.
+-   **Almacenamiento**: Aproximadamente 50MB de espacio libre.
+-   **Cámara**: Requerida únicamente si deseas utilizar la función de escaneo de tickets.
 
-## ⚠️ Importante
+## ⚠️ Importante - Descargos de Responsabilidad
 
-* Esta app no está afiliada oficialmente con McDonald's
-* Distribución exclusivamente por canales independientes
-* No se recopilan datos personales
-* Aplicación desarrollada con fines de uso personal y para compartir con amigos
+-   Esta aplicación **no está afiliada oficialmente con McDonald's Corporation** ni con ninguna de sus subsidiarias. Es un proyecto independiente.
+-   La distribución se realiza **exclusivamente por canales independientes** (descarga directa de APK). No la encontrarás en tiendas de aplicaciones oficiales.
+-   La aplicación **no recopila, almacena ni transmite datos personales** del usuario. Toda la información de la colección se guarda localmente.
+-   Aplicación desarrollada con fines de **uso personal y para compartir con amigos** coleccionistas.
 
 <div align="center">
 
+---
+
 ## 💫 Comparte McPoints
 
-Si te gusta la aplicación, comparte el APK con otros coleccionistas.
+Si encuentras útil la aplicación, ¡no dudes en compartir el archivo APK con otros amigos coleccionistas!
 
 ---
 
 ## 📝 Licencia
 
-Este proyecto está licenciado bajo la Licencia MIT - consulta el archivo [LICENSE.md](./LICENSE.md) para más detalles.
+Este proyecto está licenciado bajo la **Licencia MIT**. Consulta el archivo `LICENSE.md` (si se incluye en el repositorio) para más detalles.
 
 *McPoints - Creado por coleccionistas, para coleccionistas.*
 

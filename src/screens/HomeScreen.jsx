@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NumberGrid from '../components/NumberGrid';
-import SearchBar from '../components/SearchBar';
-import StatsPanel from '../components/StatsPanel';
+import NumberGrid from '../components/NumberGrid.';
+import SearchBar from '../components/SearchBar.';
+import StatsPanel from '../components/StatsPanel.';
 import FilterTabs from '../components/FilterTabs';
 import { saveData } from '../utils/storage';
 import '../styles/HomeScreen.css';

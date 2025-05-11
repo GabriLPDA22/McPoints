@@ -5,7 +5,7 @@ import { ArrowLeft, BarChart, Award, CheckCircle } from "lucide-react";
 const StatsScreen = ({ collectedNumbers }) => {
   const navigate = useNavigate();
 
-  // Calcular estadísticas para 10000 números
+  // Calcular estadísticas para 10000 números (0000-9999)
   const totalNumbers = 10000;
   const collectedCount = Object.values(collectedNumbers).filter(Boolean).length;
   const pendingCount = totalNumbers - collectedCount;
@@ -48,7 +48,7 @@ const StatsScreen = ({ collectedNumbers }) => {
 
         <div className="flex items-center justify-between mb-6 relative z-10">
           <button
-            className="bg-zinc-800 border border-zinc-700 p-2 rounded-lg flex items-center justify-center text-white hover:border-fuchsia-500"
+            className="bg-zinc-800 border border-zinc-700 p-2 rounded-lg flex items-center justify-center text-white hover:border-fuchsia-500 focus:outline-none"
             onClick={() => navigate("/")}
           >
             <ArrowLeft className="h-5 w-5" />
@@ -68,9 +68,7 @@ const StatsScreen = ({ collectedNumbers }) => {
               <svg className="w-full h-full" viewBox="0 0 100 100">
                 {/* Fondo del círculo */}
                 <circle
-                  cx="50"
-                  cy="50"
-                  r="45"
+                  cx="50" cy="50" r="45"
                   fill="none"
                   stroke="#27272a"
                   strokeWidth="10"
@@ -78,9 +76,7 @@ const StatsScreen = ({ collectedNumbers }) => {
 
                 {/* Progreso */}
                 <circle
-                  cx="50"
-                  cy="50"
-                  r="45"
+                  cx="50" cy="50" r="45"
                   fill="none"
                   stroke="url(#gradientProgress)"
                   strokeWidth="10"
@@ -92,13 +88,7 @@ const StatsScreen = ({ collectedNumbers }) => {
 
                 {/* Gradiente para el círculo */}
                 <defs>
-                  <linearGradient
-                    id="gradientProgress"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="0%"
-                  >
+                  <linearGradient id="gradientProgress" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#c026d3" />
                     <stop offset="100%" stopColor="#9333ea" />
                   </linearGradient>
@@ -106,8 +96,7 @@ const StatsScreen = ({ collectedNumbers }) => {
 
                 {/* Texto de porcentaje */}
                 <text
-                  x="50"
-                  y="50"
+                  x="50" y="50"
                   dominantBaseline="middle"
                   textAnchor="middle"
                   className="text-3xl font-bold"
@@ -119,8 +108,7 @@ const StatsScreen = ({ collectedNumbers }) => {
 
                 {/* Texto de "completado" */}
                 <text
-                  x="50"
-                  y="65"
+                  x="50" y="65"
                   dominantBaseline="middle"
                   textAnchor="middle"
                   className="text-xs"
@@ -135,15 +123,11 @@ const StatsScreen = ({ collectedNumbers }) => {
 
           <div className="flex justify-between">
             <div className="flex-1 flex flex-col items-center bg-zinc-900 border border-zinc-800 p-4 rounded-xl mr-2">
-              <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-500">
-                {collectedCount}
-              </span>
+              <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-purple-500">{collectedCount}</span>
               <span className="text-zinc-400 text-sm">Coleccionados</span>
             </div>
             <div className="flex-1 flex flex-col items-center bg-zinc-900 border border-zinc-800 p-4 rounded-xl ml-2">
-              <span className="text-2xl font-bold text-zinc-300">
-                {pendingCount}
-              </span>
+              <span className="text-2xl font-bold text-zinc-300">{pendingCount}</span>
               <span className="text-zinc-400 text-sm">Pendientes</span>
             </div>
           </div>
@@ -158,19 +142,13 @@ const StatsScreen = ({ collectedNumbers }) => {
 
           <div className="space-y-4">
             {ranges.map((range) => {
-              const rangePercentage = Math.round(
-                (range.count / range.total) * 100
-              );
+              const rangePercentage = Math.round((range.count / range.total) * 100);
 
               return (
                 <div key={range.name} className="space-y-1">
                   <div className="flex justify-between">
-                    <span className="text-sm font-medium text-zinc-300">
-                      {range.name}
-                    </span>
-                    <span className="text-sm text-zinc-400">
-                      {range.count}/{range.total}
-                    </span>
+                    <span className="text-sm font-medium text-zinc-300">{range.name}</span>
+                    <span className="text-sm text-zinc-400">{range.count}/{range.total}</span>
                   </div>
                   <div className="w-full h-3 bg-zinc-900 rounded-full overflow-hidden">
                     <div
@@ -193,146 +171,66 @@ const StatsScreen = ({ collectedNumbers }) => {
 
           <div className="grid grid-cols-2 gap-4">
             {/* Logros desbloqueados y bloqueados */}
-            <div
-              className={`p-4 rounded-xl border ${
-                collectedCount >= 10
-                  ? "bg-gradient-to-br from-fuchsia-900 to-purple-900 border-fuchsia-500/30 shadow-[0_0_10px_rgba(192,38,211,0.2)]"
-                  : "bg-zinc-900 border-zinc-800"
-              }`}
-            >
-              <div
-                className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${
-                  collectedCount >= 10
-                    ? "bg-gradient-to-r from-fuchsia-600 to-purple-600"
-                    : "bg-zinc-800"
-                }`}
-              >
-                <CheckCircle
-                  className={`h-6 w-6 ${
-                    collectedCount >= 10 ? "text-white" : "text-zinc-600"
-                  }`}
-                />
+            <div className={`p-4 rounded-xl border ${collectedCount >= 10 ?
+              'bg-gradient-to-br from-fuchsia-900 to-purple-900 border-fuchsia-500/30 shadow-[0_0_10px_rgba(192,38,211,0.2)]' :
+              'bg-zinc-900 border-zinc-800'}`}>
+              <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${
+                collectedCount >= 10 ? 'bg-gradient-to-r from-fuchsia-600 to-purple-600' : 'bg-zinc-800'
+              }`}>
+                <CheckCircle className={`h-6 w-6 ${collectedCount >= 10 ? 'text-white' : 'text-zinc-600'}`} />
               </div>
-              <h3
-                className={`font-bold text-center ${
-                  collectedCount >= 10 ? "text-white" : "text-zinc-500"
-                }`}
-              >
+              <h3 className={`font-bold text-center ${collectedCount >= 10 ? 'text-white' : 'text-zinc-500'}`}>
                 Principiante
               </h3>
-              <p
-                className={`text-xs text-center mt-1 ${
-                  collectedCount >= 10 ? "text-fuchsia-200" : "text-zinc-600"
-                }`}
-              >
+              <p className={`text-xs text-center mt-1 ${collectedCount >= 10 ? 'text-fuchsia-200' : 'text-zinc-600'}`}>
                 Colecciona 10 números
               </p>
             </div>
 
-            <div
-              className={`p-4 rounded-xl border ${
-                collectedCount >= 100
-                  ? "bg-gradient-to-br from-fuchsia-900 to-purple-900 border-fuchsia-500/30 shadow-[0_0_10px_rgba(192,38,211,0.2)]"
-                  : "bg-zinc-900 border-zinc-800"
-              }`}
-            >
-              <div
-                className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${
-                  collectedCount >= 100
-                    ? "bg-gradient-to-r from-fuchsia-600 to-purple-600"
-                    : "bg-zinc-800"
-                }`}
-              >
-                <CheckCircle
-                  className={`h-6 w-6 ${
-                    collectedCount >= 100 ? "text-white" : "text-zinc-600"
-                  }`}
-                />
+            <div className={`p-4 rounded-xl border ${collectedCount >= 100 ?
+              'bg-gradient-to-br from-fuchsia-900 to-purple-900 border-fuchsia-500/30 shadow-[0_0_10px_rgba(192,38,211,0.2)]' :
+              'bg-zinc-900 border-zinc-800'}`}>
+              <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${
+                collectedCount >= 100 ? 'bg-gradient-to-r from-fuchsia-600 to-purple-600' : 'bg-zinc-800'
+              }`}>
+                <CheckCircle className={`h-6 w-6 ${collectedCount >= 100 ? 'text-white' : 'text-zinc-600'}`} />
               </div>
-              <h3
-                className={`font-bold text-center ${
-                  collectedCount >= 100 ? "text-white" : "text-zinc-500"
-                }`}
-              >
+              <h3 className={`font-bold text-center ${collectedCount >= 100 ? 'text-white' : 'text-zinc-500'}`}>
                 Coleccionista
               </h3>
-              <p
-                className={`text-xs text-center mt-1 ${
-                  collectedCount >= 100 ? "text-fuchsia-200" : "text-zinc-600"
-                }`}
-              >
+              <p className={`text-xs text-center mt-1 ${collectedCount >= 100 ? 'text-fuchsia-200' : 'text-zinc-600'}`}>
                 Colecciona 100 números
               </p>
             </div>
 
-            <div
-              className={`p-4 rounded-xl border ${
-                collectedCount >= 1000
-                  ? "bg-gradient-to-br from-fuchsia-900 to-purple-900 border-fuchsia-500/30 shadow-[0_0_10px_rgba(192,38,211,0.2)]"
-                  : "bg-zinc-900 border-zinc-800"
-              }`}
-            >
-              <div
-                className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${
-                  collectedCount >= 1000
-                    ? "bg-gradient-to-r from-fuchsia-600 to-purple-600"
-                    : "bg-zinc-800"
-                }`}
-              >
-                <CheckCircle
-                  className={`h-6 w-6 ${
-                    collectedCount >= 1000 ? "text-white" : "text-zinc-600"
-                  }`}
-                />
+            <div className={`p-4 rounded-xl border ${collectedCount >= 1000 ?
+              'bg-gradient-to-br from-fuchsia-900 to-purple-900 border-fuchsia-500/30 shadow-[0_0_10px_rgba(192,38,211,0.2)]' :
+              'bg-zinc-900 border-zinc-800'}`}>
+              <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${
+                collectedCount >= 1000 ? 'bg-gradient-to-r from-fuchsia-600 to-purple-600' : 'bg-zinc-800'
+              }`}>
+                <CheckCircle className={`h-6 w-6 ${collectedCount >= 1000 ? 'text-white' : 'text-zinc-600'}`} />
               </div>
-              <h3
-                className={`font-bold text-center ${
-                  collectedCount >= 1000 ? "text-white" : "text-zinc-500"
-                }`}
-              >
+              <h3 className={`font-bold text-center ${collectedCount >= 1000 ? 'text-white' : 'text-zinc-500'}`}>
                 Experto
               </h3>
-              <p
-                className={`text-xs text-center mt-1 ${
-                  collectedCount >= 1000 ? "text-fuchsia-200" : "text-zinc-600"
-                }`}
-              >
+              <p className={`text-xs text-center mt-1 ${collectedCount >= 1000 ? 'text-fuchsia-200' : 'text-zinc-600'}`}>
                 Colecciona 1000 números
               </p>
             </div>
 
-            <div
-              className={`p-4 rounded-xl border ${
-                collectedCount >= 5000
-                  ? "bg-gradient-to-br from-fuchsia-900 to-purple-900 border-fuchsia-500/30 shadow-[0_0_10px_rgba(192,38,211,0.2)]"
-                  : "bg-zinc-900 border-zinc-800"
-              }`}
-            >
-              <div
-                className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${
-                  collectedCount >= 5000
-                    ? "bg-gradient-to-r from-fuchsia-600 to-purple-600"
-                    : "bg-zinc-800"
-                }`}
-              >
-                <CheckCircle
-                  className={`h-6 w-6 ${
-                    collectedCount >= 5000 ? "text-white" : "text-zinc-600"
-                  }`}
-                />
+            <div className={`p-4 rounded-xl border ${collectedCount >= 5000 ?
+              'bg-gradient-to-br from-fuchsia-900 to-purple-900 border-fuchsia-500/30 shadow-[0_0_10px_rgba(192,38,211,0.2)]' :
+              'bg-zinc-900 border-zinc-800'}`}>
+              <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${
+                collectedCount >= 5000 ? 'bg-gradient-to-r from-fuchsia-600 to-purple-600' : 'bg-zinc-800'
+              }`}>
+                <CheckCircle className={`h-6 w-6 ${collectedCount >= 5000 ? 'text-white' : 'text-zinc-600'}`} />
               </div>
-              <h3
-                className={`font-bold text-center ${
-                  collectedCount >= 5000 ? "text-white" : "text-zinc-500"
-                }`}
-              >
+              <h3 className={`font-bold text-center ${collectedCount >= 5000 ? 'text-white' : 'text-zinc-500'}`}>
                 Maestro
               </h3>
-              <p
-                className={`text-xs text-center mt-1 ${
-                  collectedCount >= 5000 ? "text-fuchsia-200" : "text-zinc-600"
-                }`}
-              >
+              <p className={`text-xs text-center mt-1 ${collectedCount >= 5000 ? 'text-fuchsia-200' : 'text-zinc-600'}`}>
                 Colecciona 5000 números
               </p>
             </div>

@@ -1,13 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { Camera as CapCamera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { createWorker } from 'tesseract.js';
-import { X, Camera, CheckCircle, ChevronRight, AlertTriangle } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import {
+  Camera as CapCamera,
+  CameraResultType,
+  CameraSource,
+} from "@capacitor/camera";
+import { createWorker } from "tesseract.js";
+import {
+  X,
+  Camera,
+  CheckCircle,
+  ChevronRight,
+  AlertTriangle,
+} from "lucide-react";
 
 const ScannerModal = ({ onClose, onScan }) => {
-  const [inputNumber, setInputNumber] = useState('');
+  const [inputNumber, setInputNumber] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [ocrProgress, setOcrProgress] = useState(0);
   const [hasCamera, setHasCamera] = useState(true);
 
@@ -16,12 +26,12 @@ const ScannerModal = ({ onClose, onScan }) => {
     const checkCamera = async () => {
       try {
         const permission = await CapCamera.checkPermissions();
-        if (permission.camera === 'denied') {
+        if (permission.camera === "denied") {
           const request = await CapCamera.requestPermissions();
-          setHasCamera(request.camera === 'granted');
+          setHasCamera(request.camera === "granted");
         }
       } catch (err) {
-        console.error('Error checking camera:', err);
+        console.error("Error checking camera:", err);
         setHasCamera(false);
       }
     };
@@ -33,12 +43,12 @@ const ScannerModal = ({ onClose, onScan }) => {
   const openCamera = async () => {
     try {
       setIsProcessing(true);
-      setError('');
+      setError("");
 
       // Verificar y solicitar permisos
       const cameraPermissions = await CapCamera.checkPermissions();
-      if (cameraPermissions.camera !== 'granted') {
-        await CapCamera.requestPermissions({ permissions: ['camera'] });
+      if (cameraPermissions.camera !== "granted") {
+        await CapCamera.requestPermissions({ permissions: ["camera"] });
       }
 
       // Tomar foto con mejor configuración
@@ -48,76 +58,174 @@ const ScannerModal = ({ onClose, onScan }) => {
         source: CameraSource.Camera,
         width: 1600, // Mayor resolución para mejor OCR
         correctOrientation: true,
-        promptLabelHeader: 'Escanea el número',
-        promptLabelCancel: 'Cancelar',
-        promptLabelPhoto: 'Tomar foto'
+        promptLabelHeader: "Escanea el número",
+        promptLabelCancel: "Cancelar",
+        promptLabelPhoto: "Tomar foto",
       });
 
       // Procesar con OCR mejorado
       await processImageWithOCR(image.base64String);
     } catch (error) {
-      console.error('Error al usar la cámara:', error);
-      setError('Error al acceder a la cámara. Por favor, introduce el número manualmente.');
+      console.error("Error al usar la cámara:", error);
+      setError(
+        "Error al acceder a la cámara. Por favor, introduce el número manualmente."
+      );
       setIsProcessing(false);
     }
   };
 
-  // Función mejorada de OCR para números de 4 dígitos
+  // Función mejorada de OCR para números de 4 dígitos (0000-9999)
   const processImageWithOCR = async (imageData) => {
     try {
       // Crear worker de Tesseract con configuración optimizada para números
       const worker = await createWorker({
-        logger: progress => {
-          if (progress.status === 'recognizing text') {
+        logger: (progress) => {
+          if (progress.status === "recognizing text") {
             setOcrProgress(parseInt(progress.progress * 100));
           }
-        }
+        },
       });
 
       // Cargar y configurar Tesseract para reconocimiento de números
       await worker.load();
-      await worker.loadLanguage('eng');
-      await worker.initialize('eng');
+      await worker.loadLanguage("eng");
+      await worker.initialize("eng");
       await worker.setParameters({
-        tessedit_char_whitelist: '0123456789',
-        tessjs_create_hocr: '0',
-        tessjs_create_tsv: '0',
-        tessedit_ocr_engine_mode: '1',
+        tessedit_char_whitelist: "0123456789",
+        tessjs_create_hocr: "0",
+        tessjs_create_tsv: "0",
+        tessedit_ocr_engine_mode: "1",
         // Mejorar precisión para dígitos
-        tessjs_create_box: '0',
-        tessjs_create_unlv: '0',
-        tessjs_create_osd: '0'
+        tessjs_create_box: "0",
+        tessjs_create_unlv: "0",
+        tessjs_create_osd: "0",
+        tessedit_pageseg_mode: "6",
       });
 
       // Procesamiento de la imagen con mejor detección
-      const { data: { text } } = await worker.recognize(`data:image/jpeg;base64,${imageData}`);
+      const {
+        data: { text },
+      } = await worker.recognize(`data:image/jpeg;base64,${imageData}`);
 
-      // Limpiar el resultado y buscar un número de 4 dígitos
-      const cleanedText = text.replace(/\D/g, '');
-      const matches = cleanedText.match(/\d{4}/);
+      console.log("Texto OCR completo:", text); // Para depuración
 
-      if (matches && matches.length > 0) {
-        const detectedNumber = matches[0];
+      // Estrategia de detección para números promocionales
+      let detectedNumber = null;
+
+      // Extraer patrones de dígitos del texto OCR
+      const allDigitGroups = text.match(/\d+/g) || [];
+      console.log("Grupos de dígitos encontrados:", allDigitGroups);
+
+      // Primero buscamos patrones de exactamente 3 dígitos (000-999)
+      const threeDigitPatterns = allDigitGroups.filter(
+        (group) => group.length === 3
+      );
+      if (threeDigitPatterns.length > 0) {
+        // Tomamos el primer patrón de 3 dígitos como candidato
+        const candidate = threeDigitPatterns[0];
+        detectedNumber = candidate.padStart(4, "0");
+        console.log(
+          "Número de 3 dígitos detectado:",
+          candidate,
+          "-> Formateado:",
+          detectedNumber
+        );
+      }
+
+      // Si no encontramos un número de 3 dígitos válido, buscamos un número de 4 dígitos (1000-9999)
+      if (!detectedNumber) {
+        const fourDigitPatterns = allDigitGroups.filter(
+          (group) => group.length === 4
+        );
+        if (fourDigitPatterns.length > 0) {
+          // Tomamos el primer patrón de 4 dígitos como candidato
+          detectedNumber = fourDigitPatterns[0];
+          console.log("Número de 4 dígitos detectado:", detectedNumber);
+        }
+      }
+
+      // Si aún no hemos detectado un número, intentamos con secuencias de dígitos en cualquier formato
+      if (!detectedNumber && allDigitGroups.length > 0) {
+        // Ordenamos por longitud (preferencia por grupos más largos)
+        allDigitGroups.sort((a, b) => b.length - a.length);
+
+        for (const group of allDigitGroups) {
+          // Si es un número de 1-3 dígitos
+          if (group.length <= 3) {
+            detectedNumber = group.padStart(4, "0");
+            console.log(
+              "Usando grupo de 1-3 dígitos:",
+              group,
+              "-> Formateado:",
+              detectedNumber
+            );
+            break;
+          }
+          // Si es un número más largo, intentamos extraer 4 dígitos
+          else if (group.length > 4) {
+            // Intentar extraer 4 dígitos del grupo más largo
+            const subgroups = [];
+            for (let i = 0; i <= group.length - 4; i++) {
+              const subgroup = group.substring(i, i + 4);
+              subgroups.push(subgroup);
+            }
+
+            if (subgroups.length > 0) {
+              detectedNumber = subgroups[0];
+              console.log(
+                "Extrayendo 4 dígitos de grupo largo:",
+                detectedNumber
+              );
+              break;
+            }
+
+            // Si no encontramos subgrupos de 4 dígitos, intentamos con 3, 2 o 1 dígito
+            for (let digits = 3; digits >= 1; digits--) {
+              for (let i = 0; i <= group.length - digits; i++) {
+                const subgroup = group.substring(i, i + digits);
+                detectedNumber = subgroup.padStart(4, "0");
+                console.log(
+                  `Extrayendo ${digits} dígitos de grupo largo:`,
+                  subgroup,
+                  "-> Formateado:",
+                  detectedNumber
+                );
+                break;
+              }
+              if (detectedNumber) break;
+            }
+
+            if (detectedNumber) break;
+          }
+        }
+      }
+
+      // Actualizar la UI con el número detectado o mostrar error
+      if (detectedNumber) {
         setInputNumber(detectedNumber);
       } else {
-        setError('No se pudo detectar un número de 4 dígitos. Intenta nuevamente o introduce el número manualmente.');
+        setError(
+          "No se pudo detectar un número de ticket válido. Por favor, introduce el número manualmente."
+        );
       }
 
       // Terminar el worker
       await worker.terminate();
       setIsProcessing(false);
     } catch (error) {
-      console.error('Error en OCR:', error);
-      setError('Error al procesar la imagen. Por favor, introduce el número manualmente.');
+      console.error("Error en OCR:", error);
+      setError(
+        "Error al procesar la imagen. Por favor, introduce el número manualmente."
+      );
       setIsProcessing(false);
     }
   };
 
   const handleInputChange = (e) => {
-    const value = e.target.value.replace(/[^0-9]/g, '');
+    const value = e.target.value.replace(/[^0-9]/g, "");
     if (value.length <= 4) {
       setInputNumber(value);
-      setError('');
+      setError("");
     }
   };
 
@@ -125,7 +233,7 @@ const ScannerModal = ({ onClose, onScan }) => {
     e.preventDefault();
 
     if (!inputNumber || inputNumber.length !== 4) {
-      setError('Por favor, introduce un número válido de 4 dígitos');
+      setError("Por favor, introduce un número válido de 4 dígitos");
       return;
     }
 
@@ -148,15 +256,20 @@ const ScannerModal = ({ onClose, onScan }) => {
           <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-600 rounded-full blur-3xl opacity-20"></div>
 
           <button
-            className="absolute top-4 right-4 p-2 rounded-full bg-black/20 text-white hover:bg-black/40 transition-colors"
+            className="absolute top-4 right-4 p-3 rounded-full bg-black/20 text-white hover:bg-black/40 transition-colors focus:outline-none"
             onClick={onClose}
+            style={{ touchAction: "manipulation" }} // Mejorado  para dispositivos táctiles estaba bugueado
           >
             <X className="h-5 w-5" />
           </button>
 
           <div className="relative z-10">
-            <h2 className="text-white text-xl font-bold mt-1">Escanear número</h2>
-            <p className="text-fuchsia-200 text-sm mt-1">Añade un nuevo número a tu colección</p>
+            <h2 className="text-white text-xl font-bold mt-1">
+              Escanear número
+            </h2>
+            <p className="text-fuchsia-200 text-sm mt-1">
+              Añade un nuevo número a tu colección
+            </p>
           </div>
         </div>
 
@@ -165,15 +278,24 @@ const ScannerModal = ({ onClose, onScan }) => {
           {success ? (
             <div className="flex flex-col items-center py-8">
               <div className="w-20 h-20 bg-gradient-to-br from-fuchsia-600 to-purple-600 rounded-full flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(192,38,211,0.5)]">
-                <CheckCircle className="h-10 w-10 text-white" strokeWidth={2.5} />
+                <CheckCircle
+                  className="h-10 w-10 text-white"
+                  strokeWidth={2.5}
+                />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">¡Número añadido!</h3>
+              <h3 className="text-xl font-bold text-white mb-2">
+                ¡Número añadido!
+              </h3>
               <p className="text-zinc-400 mb-8 text-center">
-                El número <span className="font-bold text-fuchsia-500">{inputNumber}</span> ha sido añadido a tu colección
+                El número{" "}
+                <span className="font-bold text-fuchsia-500">
+                  {inputNumber}
+                </span>{" "}
+                ha sido añadido a tu colección
               </p>
               <button
                 onClick={() => onScan(inputNumber)}
-                className="w-full bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(192,38,211,0.3)] hover:shadow-[0_0_20px_rgba(192,38,211,0.5)] transition-all"
+                className="w-full bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(192,38,211,0.3)] hover:shadow-[0_0_20px_rgba(192,38,211,0.5)] transition-all focus:outline-none"
               >
                 Volver a la colección
                 <ChevronRight className="ml-1 h-5 w-5" />
@@ -189,20 +311,28 @@ const ScannerModal = ({ onClose, onScan }) => {
                       <div className="absolute inset-0 rounded-full border-2 border-zinc-700 border-t-fuchsia-500 animate-spin"></div>
                       <div className="absolute inset-2 rounded-full border-2 border-zinc-700 border-b-purple-500 animate-spin animation-delay-150"></div>
                     </div>
-                    <p className="text-white font-medium">Procesando imagen... {ocrProgress}%</p>
-                    <p className="text-zinc-500 text-sm mt-1">Buscando números...</p>
+                    <p className="text-white font-medium">
+                      Procesando imagen... {ocrProgress}%
+                    </p>
+                    <p className="text-zinc-500 text-sm mt-1">
+                      Buscando números...
+                    </p>
                   </div>
                 ) : (
                   <button
                     onClick={openCamera}
                     disabled={!hasCamera || isProcessing}
-                    className="w-full bg-zinc-800 hover:bg-zinc-750 border border-zinc-700 hover:border-fuchsia-500/50 transition-all rounded-xl p-8 flex flex-col items-center"
+                    className="w-full bg-zinc-800 hover:bg-zinc-750 border border-zinc-700 hover:border-fuchsia-500/50 transition-all rounded-xl p-8 flex flex-col items-center focus:outline-none"
                   >
                     <div className="w-16 h-16 bg-gradient-to-br from-purple-900 to-fuchsia-900 rounded-full flex items-center justify-center mb-4 shadow-[0_0_15px_rgba(192,38,211,0.3)]">
                       <Camera className="h-8 w-8 text-white" />
                     </div>
-                    <p className="text-white font-medium">Escanear con la cámara</p>
-                    <p className="text-zinc-500 text-sm mt-1">Toma una foto del número</p>
+                    <p className="text-white font-medium">
+                      Escanear con la cámara
+                    </p>
+                    <p className="text-zinc-500 text-sm mt-1">
+                      Toma una foto del número
+                    </p>
                   </button>
                 )}
               </div>
@@ -210,7 +340,9 @@ const ScannerModal = ({ onClose, onScan }) => {
               {/* Separador neón */}
               <div className="relative flex items-center mb-6">
                 <div className="flex-grow border-t border-zinc-700"></div>
-                <span className="flex-shrink mx-4 text-fuchsia-500 text-sm font-medium">o introduce manualmente</span>
+                <span className="flex-shrink mx-4 text-fuchsia-500 text-sm font-medium">
+                  o introduce manualmente
+                </span>
                 <div className="flex-grow border-t border-zinc-700"></div>
               </div>
 
@@ -238,9 +370,20 @@ const ScannerModal = ({ onClose, onScan }) => {
 
                 {/* Ejemplo visual */}
                 <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-4 mt-4">
-                  <p className="text-sm text-zinc-400 text-center mb-2">Ejemplo de número promocional:</p>
-                  <div className="bg-zinc-900 border border-zinc-700 rounded-lg py-2 px-4 flex justify-center">
-                    <span className="text-xl font-bold tracking-widest text-white">1234</span>
+                  <p className="text-sm text-zinc-400 text-center mb-2">
+                    Ejemplos de números promocionales:
+                  </p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-zinc-900 border border-zinc-700 rounded-lg py-2 px-4 flex justify-center">
+                      <span className="text-lg font-bold tracking-widest text-white">
+                        0090
+                      </span>
+                    </div>
+                    <div className="bg-zinc-900 border border-zinc-700 rounded-lg py-2 px-4 flex justify-center">
+                      <span className="text-lg font-bold tracking-widest text-white">
+                        1234
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -249,10 +392,11 @@ const ScannerModal = ({ onClose, onScan }) => {
                   type="submit"
                   disabled={inputNumber.length !== 4}
                   className={`w-full py-4 mt-6 rounded-xl font-bold flex items-center justify-center
-                    ${inputNumber.length === 4
-                      ? 'bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white shadow-[0_0_15px_rgba(192,38,211,0.3)] hover:shadow-[0_0_20px_rgba(192,38,211,0.5)]'
-                      : 'bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-700'
-                    } transition-all`}
+                    ${
+                      inputNumber.length === 4
+                        ? "bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white shadow-[0_0_15px_rgba(192,38,211,0.3)] hover:shadow-[0_0_20px_rgba(192,38,211,0.5)]"
+                        : "bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-700"
+                    } transition-all focus:outline-none`}
                 >
                   Añadir a mi colección
                   <ChevronRight className="ml-1 h-5 w-5" />

@@ -1,30 +1,25 @@
 import React from "react";
 import { Search, X } from "lucide-react";
-import "../styles/SearchBar.css";
 
 const SearchBar = ({ value, onChange }) => {
   return (
-    <div className="search-container">
-      <div className="search-bar">
-        <Search className="search-icon" />
-
+    <div className="relative z-10 mb-6">
+      <div className="relative">
         <input
-          className="search-input"
+          type="text"
           placeholder="Buscar número..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          type="text"
-          maxLength={3}
+          className="w-full bg-zinc-800 border border-zinc-700 rounded-xl py-3.5 px-12 text-white focus:outline-none focus:border-fuchsia-500 placeholder-zinc-500"
+          maxLength={4}
         />
-
-        {/* Botón de limpiar búsqueda */}
+        <Search className="absolute left-4 top-4 h-5 w-5 text-zinc-500" />
         {value && (
           <button
-            className="clear-button"
-            onClick={() => onChange("")}
-            aria-label="Limpiar búsqueda"
+            onClick={() => onChange('')}
+            className="absolute right-4 top-4"
           >
-            <X size={16} />
+            <X className="h-5 w-5 text-zinc-500 hover:text-white" />
           </button>
         )}
       </div>

@@ -1,28 +1,35 @@
 import React from "react";
-import "../styles/NumberItem.css";
+import { CheckCircle } from "lucide-react";
 
 const NumberItem = ({ number, isCollected, onToggle }) => {
   return (
-    <button
-      className={`number-item ${isCollected ? "collected" : ""}`}
+    <div
       onClick={onToggle}
+      className={`aspect-square flex items-center justify-center rounded-xl relative overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer ${
+        isCollected
+          ? 'bg-gradient-to-br from-fuchsia-600 to-purple-800 border border-fuchsia-500/30'
+          : 'bg-zinc-800 border border-zinc-700 hover:border-zinc-600'
+      }`}
     >
+      {/* Efectos de iluminación */}
       {isCollected && (
-        <span className="check-icon">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-        </span>
+        <>
+          <div className="absolute -inset-1 bg-gradient-to-r from-fuchsia-600 to-purple-600 opacity-30 blur-md group-hover:opacity-50 transition-opacity"></div>
+          <div className="absolute inset-0.5 rounded-lg bg-gradient-to-br from-fuchsia-600 to-purple-800 z-10"></div>
+        </>
       )}
-      <span className="number-text">{number}</span>
-    </button>
+
+      <span className={`text-xl font-bold relative z-20 ${isCollected ? 'text-white' : 'text-gray-300'}`}>
+        {number}
+      </span>
+
+      {/* Indicador de coleccionado */}
+      {isCollected && (
+        <div className="absolute top-2 right-2 z-20">
+          <CheckCircle className="h-5 w-5 text-white" />
+        </div>
+      )}
+    </div>
   );
 };
 

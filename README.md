@@ -18,7 +18,7 @@
 
 📱 DESCARGA DIRECTA - INSTALACIÓN MANUAL 📱
 
-### [⬇️ Descargar APK v1.0.0](https://github.com/GabriLPDA22/mcpoints/releases/download/v1.0.0/mcpoints-v1.0.1.apk)
+### [⬇️ Descargar APK v1.0.1](https://github.com/GabriLPDA22/mcpoints/releases/download/v1.0.1/MacPoints.apk)
 
 </div>
 

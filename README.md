@@ -6,7 +6,7 @@
 
 **La mejor app para coleccionar números promocionales de McDonald's**
 
-[![Versión](https://img.shields.io/badge/Versión-1.0.0-brightgreen.svg)](https://github.com/yourusername/mcpoints/releases/tag/v1.0.0)
+[![Versión](https://img.shields.io/badge/Versión-1.0.0-brightgreen.svg)](https://github.com/yourusername/mcpoints/releases/tag/v1.0.1)
 [![Plataforma](https://img.shields.io/badge/Plataforma-Android-green.svg)](https://github.com/yourusername/mcpoints)
 [![Distribución](https://img.shields.io/badge/Distribución-Independiente-orange.svg)](https://github.com/yourusername/mcpoints/releases)
 

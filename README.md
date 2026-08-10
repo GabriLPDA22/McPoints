@@ -29,12 +29,9 @@ No es una app oficial de McDonald's, ni se conecta a ningún servidor: todo vive
 
 La versión 2.0 es un rediseño completo de la app, no un lavado de cara:
 
-- **Identidad propia**, inspirada en tickets térmicos, escáneres y perforaciones — sin copiar la
-  marca oficial de McDonald's.
-- **Escáner e iconografía renovados**: iconos propios para kiosco, caja, app, McAuto y delivery,
-  además de un lector OCR que reconoce el ticket completo, no solo el número.
-- **Idioma**: la app está disponible en **Español**, **English** y **Português (Portugal)**,
-  seleccionable desde Ajustes.
+- **Identidad propia**, inspirada en tickets térmicos, escáneres y perforaciones — sin copiar la marca oficial de McDonald's.
+- **Escáner e iconografía renovados**: iconos propios para kiosco, caja, app, McAuto y delivery, además de un lector OCR que reconoce el ticket completo, no solo el número.
+- **Idioma**: la app está disponible en **Español**, **English** y **Português (Portugal)**, seleccionable desde Ajustes.
 - **Modo claro como tema principal** (con un modo oscuro a juego, no al revés).
 - **Splash screen, navegación, historial y pantallas de detalle** rediseñados de arriba a abajo.
 
@@ -147,8 +144,7 @@ npm run test:watch   # tests en modo watch
 
 ## Compilar y ejecutar en Android Studio
 
-1. Instala [Android Studio](https://developer.android.com/studio) (incluye el SDK de Android y
-   un JDK compatible).
+1. Instala [Android Studio](https://developer.android.com/studio) (incluye el SDK de Android y un JDK compatible).
 2. Instala las dependencias del proyecto y sincroniza Capacitor con Android:
 
    ```bash
@@ -185,12 +181,9 @@ cd android
 
 ## Avisos importantes
 
-- McPoints **no está afiliada oficialmente con McDonald's Corporation** ni con ninguna de sus
-  subsidiarias. Es un proyecto independiente, creado por y para coleccionistas.
-- La app **no recopila, almacena ni transmite datos personales**. Toda tu colección se guarda
-  únicamente en tu dispositivo.
-- Distribución **exclusivamente independiente** (APK de este repositorio). No se distribuye por
-  ninguna tienda de aplicaciones oficial.
+- McPoints **no está afiliada oficialmente con McDonald's Corporation** ni con ninguna de sus subsidiarias. Es un proyecto independiente, creado por y para coleccionistas.
+- La app **no recopila, almacena ni transmite datos personales**. Toda tu colección se guarda únicamente en tu dispositivo.
+- Distribución **exclusivamente independiente** (APK de este repositorio). No se distribuye por ninguna tienda de aplicaciones oficial.
 - Desarrollada con fines de **uso personal y para compartir entre amigos** coleccionistas.
 
 ## Licencia

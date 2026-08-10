@@ -104,6 +104,9 @@ xcuserdata/
 .stylelintcache
 .capacitor
 
+# Configuración local de agentes de IA
+.claude/
+
 # Carpeta caché de PWA
 /public/workbox-*.js
 /public/sw.js

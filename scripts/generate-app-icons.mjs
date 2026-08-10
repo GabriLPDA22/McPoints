@@ -109,21 +109,22 @@ async function main() {
     canvasSize: 1024,
     iconSize: 560,
     color: PALETTE.primaryLight,
-    bg: PALETTE.surface,
+    bg: PALETTE.bgDark,
     file: 'icon-only.png',
   });
 
+  // Foreground del adaptive icon: ticket sobre transparente (el fondo va aparte).
   await renderIcon({
     canvasSize: 1024,
     iconSize: 470,
     color: PALETTE.primaryLight,
-    bg: PALETTE.surface,
+    bg: { r: 0, g: 0, b: 0, alpha: 0 },
     file: 'icon-foreground.png',
   });
 
   await renderSolid({
     canvasSize: 1024,
-    bg: PALETTE.surface,
+    bg: PALETTE.bgDark,
     file: 'icon-background.png',
   });
 

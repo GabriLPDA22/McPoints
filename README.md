@@ -5,11 +5,11 @@
 
 ### Tu colección de números de pedido de McDonald's, en el móvil.
 
-`v2.0.0`  •  `Android`  •  `Distribución independiente`  •  `Licencia MIT`
+`v2.0.1`  •  `Android`  •  `Distribución independiente`  •  `Licencia MIT`
 
 <br>
 
-## [⬇️ Descargar McPoints 2.0.0 (APK)](https://github.com/GabriLPDA22/McPoints/releases/download/v2.0.0/McPoints-2.0.0.apk)
+## [⬇️ Descargar McPoints 2.0.1 (APK)](https://github.com/GabriLPDA22/McPoints/releases/download/v2.0.1/McPoints-2.0.1.apk)
 
 Descarga directa · Instalación manual · Sin Google Play
 
@@ -100,7 +100,7 @@ haría falta para activar esa interpretación está fijado por adelantado en
 
 ## Instalación (APK)
 
-1. **Descarga** [`McPoints-2.0.0.apk`](https://github.com/GabriLPDA22/McPoints/releases/download/v2.0.0/McPoints-2.0.0.apk) desde el enlace de arriba.
+1. **Descarga** [`McPoints-2.0.1.apk`](https://github.com/GabriLPDA22/McPoints/releases/download/v2.0.1/McPoints-2.0.1.apk) desde el enlace de arriba.
 2. **Habilita "Instalar apps desconocidas"** (u "Orígenes desconocidos") para tu navegador o gestor de archivos, en Ajustes → Seguridad de tu Android.
 3. **Abre el APK descargado** y sigue las instrucciones en pantalla.
 4. Listo — abre McPoints y empieza tu colección.

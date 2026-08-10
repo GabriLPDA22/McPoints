@@ -64,42 +64,23 @@ async function renderSolid({ canvasSize, bg, file }) {
   console.log(`✓ ${file}`);
 }
 
-/** Splash: icono pequeño centrado + wordmark "McPoints" debajo. */
-async function renderSplash({ canvasSize, bg, iconColor, textColor, file }) {
-  const iconSize = Math.round(canvasSize * 0.16);
-  const iconTop = Math.round(canvasSize * 0.42);
-  const iconLeft = Math.round((canvasSize - iconSize) / 2);
-  const fontSize = Math.round(canvasSize * 0.052);
-  const textY = iconTop + iconSize + Math.round(canvasSize * 0.075);
-
-  const background = await sharp({
-    create: { width: canvasSize, height: canvasSize, channels: 4, background: bg },
-  })
-    .png()
-    .toBuffer();
-
-  const iconBuffer = await sharp(
-    Buffer.from(ticketSvg({ size: iconSize, color: iconColor, strokeWidth: 6.5 }))
-  )
-    .png()
-    .toBuffer();
-
-  const textSvg = Buffer.from(`
-    <svg width="${canvasSize}" height="${canvasSize}" xmlns="http://www.w3.org/2000/svg">
-      <text x="50%" y="${textY}" text-anchor="middle" font-family="Arial, Helvetica, sans-serif"
-        font-weight="700" font-size="${fontSize}" fill="${textColor}">McPoints</text>
-    </svg>
-  `);
-
-  await sharp(background)
-    .composite([
-      { input: iconBuffer, left: iconLeft, top: iconTop },
-      { input: textSvg, left: 0, top: 0 },
-    ])
-    .png()
-    .toFile(path.join(outDir, file));
-
-  console.log(`✓ ${file}`);
+/**
+ * Splash: icono centrado, sin wordmark. El texto se eliminó a propósito:
+ * la pantalla de splash nativa (Theme.SplashScreen de Android 12+) solo debe
+ * mostrar el icono para que coincida exactamente con el splash animado de
+ * React (`SplashHandler` en src/App.jsx), que tampoco muestra texto. Si el
+ * splash nativo y el splash JS tienen composiciones distintas (icono+texto
+ * vs. solo icono, en posiciones distintas) se percibe como una transición
+ * brusca o un "doble splash" al arrancar la app.
+ */
+async function renderSplash({ canvasSize, bg, iconColor, file }) {
+  await renderIcon({
+    canvasSize,
+    iconSize: Math.round(canvasSize * 0.16),
+    color: iconColor,
+    bg,
+    file,
+  });
 }
 
 async function main() {
@@ -132,7 +113,6 @@ async function main() {
     canvasSize: 2732,
     bg: PALETTE.bgLight,
     iconColor: PALETTE.primaryLight,
-    textColor: PALETTE.ink,
     file: 'splash.png',
   });
 
@@ -140,7 +120,6 @@ async function main() {
     canvasSize: 2732,
     bg: PALETTE.bgDark,
     iconColor: PALETTE.primaryDark,
-    textColor: PALETTE.textDark,
     file: 'splash-dark.png',
   });
 }

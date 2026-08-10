@@ -1,17 +1,21 @@
 <div align="center">
 
-<img src="assets/icon-only.png" alt="McPoints" width="120">
+<img src="assets/icon-only.png" alt="McPoints" width="110">
 
 # McPoints
 
 **Tu colección de números de pedido de McDonald's, en el móvil.**
 
-[![Versión](https://img.shields.io/badge/versión-2.0.0-E54335?style=flat-square)](https://github.com/GabriLPDA22/McPoints/releases/tag/v2.0.0)
-[![Plataforma](https://img.shields.io/badge/plataforma-Android-3DDC84?style=flat-square)](https://github.com/GabriLPDA22/McPoints)
-[![Distribución](https://img.shields.io/badge/distribución-independiente-lightgrey?style=flat-square)](https://github.com/GabriLPDA22/McPoints/releases)
-[![Licencia](https://img.shields.io/badge/licencia-MIT-blue?style=flat-square)](LICENSE.md)
+[![Versión](https://img.shields.io/badge/Versión-2.0.0-E54335?style=flat&labelColor=1a1a1a)](https://github.com/GabriLPDA22/McPoints/releases/tag/v2.0.0)
+[![Plataforma](https://img.shields.io/badge/Plataforma-Android-3DDC84?style=flat&labelColor=1a1a1a&logo=android&logoColor=white)](https://github.com/GabriLPDA22/McPoints)
+[![Distribución](https://img.shields.io/badge/Distribución-Independiente-D6A125?style=flat&labelColor=1a1a1a)](https://github.com/GabriLPDA22/McPoints/releases)
+[![Licencia](https://img.shields.io/badge/Licencia-MIT-4a90d9?style=flat&labelColor=1a1a1a)](LICENSE.md)
 
-### [⬇️ Descargar McPoints 2.0.0 (APK)](https://github.com/GabriLPDA22/McPoints/releases/download/v2.0.0/McPoints-2.0.0.apk)
+<br>
+
+[![Descargar APK](https://img.shields.io/badge/⬇%EF%B8%8F%20Descargar%20APK%20v2.0.0-E54335?style=for-the-badge&labelColor=E54335&color=E54335)](https://github.com/GabriLPDA22/McPoints/releases/download/v2.0.0/McPoints-2.0.0.apk)
+
+📲 Descarga directa · Instalación manual · Sin Google Play
 
 </div>
 
@@ -40,17 +44,54 @@ La versión 2.0 es un rediseño completo de la app, no un lavado de cara:
 
 ## Características
 
-| | |
-|---|---|
-| 🎫 **Colección real** | Cada número entra en tu colección tal y como aparece en el ticket, de 1 a varios dígitos. Sin rellenos ni recortes. |
-| 📍 **Contexto de cada pedido** | McPoints reconoce de dónde salió el pedido (kiosco, caja, app, McAuto, delivery) y cómo se entregó, y lo guarda junto al número. |
-| 🔁 **El mismo número, por vías distintas** | Conseguir el `2323` en un kiosco y volver a conseguirlo en el McAuto no son dos números repetidos: es un número con dos orígenes por completar. |
-| 📷 **Escáner de tickets** | Encuadra el ticket completo con la cámara. McPoints lee el número y busca en el resto del texto las pistas de origen y entrega. |
-| 🔍 **Búsqueda y filtros** | Localiza cualquier número al instante y filtra tu colección por origen, longitud o fecha. |
-| 🕓 **Historial** | Cada avistamiento queda registrado con fecha, hora y método de detección. |
-| 🌐 **Multi-idioma** | Español, English y Português (Portugal), con sus propios nombres y unidades de fecha/hora. |
-| 🌗 **Modo claro y oscuro** | La información nunca se codifica solo con el color. |
-| 💾 **100% local** | Guardado automático en el dispositivo, con exportación e importación de tu colección. |
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <h3>🎫 Colección real</h3>
+      <p>Cada número entra en tu colección tal y como aparece en el ticket, de 1 a varios dígitos. Sin rellenos ni recortes.</p>
+    </td>
+    <td width="50%" valign="top">
+      <h3>📍 Contexto de cada pedido</h3>
+      <p>McPoints reconoce de dónde salió el pedido (kiosco, caja, app, McAuto, delivery) y cómo se entregó, y lo guarda junto al número.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <h3>🔁 El mismo número, por vías distintas</h3>
+      <p>Conseguir el <code>2323</code> en un kiosco y volver a conseguirlo en el McAuto no son dos números repetidos: es un número con dos orígenes por completar.</p>
+    </td>
+    <td width="50%" valign="top">
+      <h3>📷 Escáner de tickets</h3>
+      <p>Encuadra el ticket completo con la cámara. McPoints lee el número y busca en el resto del texto las pistas de origen y entrega.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <h3>🔍 Búsqueda y filtros</h3>
+      <p>Localiza cualquier número al instante y filtra tu colección por origen, longitud o fecha.</p>
+    </td>
+    <td width="50%" valign="top">
+      <h3>🕓 Historial</h3>
+      <p>Cada avistamiento queda registrado con fecha, hora y método de detección.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <h3>🌐 Multi-idioma</h3>
+      <p>Español, English y Português (Portugal), con sus propios nombres y unidades de fecha/hora.</p>
+    </td>
+    <td width="50%" valign="top">
+      <h3>🌗 Modo claro y oscuro</h3>
+      <p>Tema claro como principal y un oscuro a juego. La información nunca se codifica solo con el color.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top" colspan="2">
+      <h3>💾 100% local</h3>
+      <p>Guardado automático en el dispositivo, con exportación e importación de tu colección. Sin cuentas, sin servidores.</p>
+    </td>
+  </tr>
+</table>
 
 ## Lo que McPoints no hace
 

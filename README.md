@@ -1,21 +1,17 @@
 <div align="center">
-
-<img src="assets/icon-only.png" alt="McPoints" width="110">
+<img src="assets/icon-only.png" alt="McPoints" width="96" />
 
 # McPoints
 
-**Tu colección de números de pedido de McDonald's, en el móvil.**
+### Tu colección de números de pedido de McDonald's, en el móvil.
 
-[![Versión](https://img.shields.io/badge/Versión-2.0.0-E54335?style=flat&labelColor=1a1a1a)](https://github.com/GabriLPDA22/McPoints/releases/tag/v2.0.0)
-[![Plataforma](https://img.shields.io/badge/Plataforma-Android-3DDC84?style=flat&labelColor=1a1a1a&logo=android&logoColor=white)](https://github.com/GabriLPDA22/McPoints)
-[![Distribución](https://img.shields.io/badge/Distribución-Independiente-D6A125?style=flat&labelColor=1a1a1a)](https://github.com/GabriLPDA22/McPoints/releases)
-[![Licencia](https://img.shields.io/badge/Licencia-MIT-4a90d9?style=flat&labelColor=1a1a1a)](LICENSE.md)
+`v2.0.0`  •  `Android`  •  `Distribución independiente`  •  `Licencia MIT`
 
 <br>
 
-[![Descargar APK](https://img.shields.io/badge/⬇%EF%B8%8F%20Descargar%20APK%20v2.0.0-E54335?style=for-the-badge&labelColor=E54335&color=E54335)](https://github.com/GabriLPDA22/McPoints/releases/download/v2.0.0/McPoints-2.0.0.apk)
+## [⬇️ Descargar McPoints 2.0.0 (APK)](https://github.com/GabriLPDA22/McPoints/releases/download/v2.0.0/McPoints-2.0.0.apk)
 
-📲 Descarga directa · Instalación manual · Sin Google Play
+Descarga directa · Instalación manual · Sin Google Play
 
 </div>
 

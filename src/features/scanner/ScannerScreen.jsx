@@ -1,9 +1,17 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { X, Keyboard, Loader2 } from 'lucide-react';
+import { X, Keyboard, Loader2, CameraOff } from 'lucide-react';
+import { Capacitor } from '@capacitor/core';
 import { useAppStore } from '@/core/store/useAppStore.js';
 import { Button, BottomSheet, TaxonomyBadge } from '@/core/design-system';
-import { captureAndRecognize, triggerHaptic } from './scannerService.js';
+import {
+  captureAndRecognize,
+  captureFromPreview,
+  ensureCameraPermission,
+  startCameraPreview,
+  stopCameraPreview,
+  triggerHaptic,
+} from './scannerService.js';
 import { normalizeRawNumber } from '@/core/detection/engine.js';
 import { DEFAULT_RULES } from '@/core/detection/rules.js';
 import { getSourceMeta } from '@/core/taxonomy/registry.js';
@@ -25,6 +33,10 @@ export function ScannerScreen() {
   const [manualOpen, setManualOpen] = useState(!!location.state?.openManual);
   const [manualValue, setManualValue] = useState('');
   const [result, setResult] = useState(null);
+  // 'starting' hasta que el preview responde; 'denied' si el usuario rechaza el
+  // permiso; 'unavailable' en navegador o si el plugin falla, donde se recurre
+  // a la cámara del sistema al pulsar el disparador.
+  const [cameraState, setCameraState] = useState('starting');
 
   // Desde Home, "Introducir manualmente" salta directo aquí sin pasar por
   // la cámara.
@@ -34,6 +46,52 @@ export function ScannerScreen() {
       navigate(location.pathname, { replace: true, state: null });
     }
   }, [location, navigate]);
+
+  // La cámara se abre (y pide permiso) al entrar en la pantalla, no al pulsar
+  // el disparador: un visor en negro que no reacciona se lee como una app rota.
+  // Se apaga al salir y mientras se muestra el resultado del escaneo.
+  const cameraVisible = !result;
+
+  useEffect(() => {
+    if (!cameraVisible) return undefined;
+
+    let cancelled = false;
+
+    (async () => {
+      if (!Capacitor.isNativePlatform()) {
+        setCameraState('unavailable');
+        return;
+      }
+
+      setCameraState('starting');
+
+      if (!(await ensureCameraPermission())) {
+        if (!cancelled) setCameraState('denied');
+        return;
+      }
+
+      try {
+        await startCameraPreview();
+        if (cancelled) {
+          await stopCameraPreview();
+          return;
+        }
+        // El preview se dibuja por detrás del WebView, así que el fondo de la
+        // página tiene que dejar de pintar para que se vea.
+        document.body.classList.add('camera-active');
+        setCameraState('ready');
+      } catch (e) {
+        console.warn('Camera preview failed', e);
+        if (!cancelled) setCameraState('unavailable');
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      document.body.classList.remove('camera-active');
+      stopCameraPreview();
+    };
+  }, [cameraVisible]);
 
   /**
    * Registra el avistamiento. El origen y la entrega vienen del contexto del
@@ -70,7 +128,10 @@ export function ScannerScreen() {
     setError('');
 
     try {
-      const scan = await captureAndRecognize(domain, DEFAULT_RULES);
+      const scan =
+        cameraState === 'ready'
+          ? await captureFromPreview(domain, DEFAULT_RULES)
+          : await captureAndRecognize(domain, DEFAULT_RULES);
 
       if (scan.candidates.length === 0) {
         setError(t('scanner.errorNoDetection'));
@@ -96,7 +157,7 @@ export function ScannerScreen() {
     }
 
     setProcessing(false);
-  }, [domain, record]);
+  }, [cameraState, domain, record, t]);
 
   const handleManualSubmit = async (e) => {
     e.preventDefault();
@@ -152,10 +213,16 @@ export function ScannerScreen() {
 
   const detectedSource = analysis ? getSourceMeta(analysis.source.value, t) : null;
 
+  const cameraDenied = cameraState === 'denied';
+
   return (
-    <div className="fixed inset-0 z-40 bg-black flex flex-col text-white">
+    <div
+      className={`fixed inset-0 z-40 flex flex-col text-white ${
+        cameraState === 'ready' ? 'bg-transparent' : 'bg-black'
+      }`}
+    >
       <div
-        className="flex items-center justify-between px-2"
+        className="flex items-center justify-between px-2 bg-gradient-to-b from-black/55 to-transparent pb-3"
         style={{ paddingTop: 'calc(0.75rem + env(safe-area-inset-top))' }}
       >
         <button
@@ -171,24 +238,31 @@ export function ScannerScreen() {
       </div>
 
       <div className="flex-1 relative flex items-center justify-center">
-        <div className="absolute inset-10 pointer-events-none overflow-hidden">
-          <div className="absolute top-0 left-0 w-7 h-7 border-t-2 border-l-2 border-white rounded-tl-sm" />
-          <div className="absolute top-0 right-0 w-7 h-7 border-t-2 border-r-2 border-white rounded-tr-sm" />
-          <div className="absolute bottom-0 left-0 w-7 h-7 border-b-2 border-l-2 border-white rounded-bl-sm" />
-          <div className="absolute bottom-0 right-0 w-7 h-7 border-b-2 border-r-2 border-white rounded-br-sm" />
-          {!processing && (
-            <div
-              className="absolute left-0 right-0 top-1/2 h-[2px] bg-accent shadow-[0_0_10px_2px_rgb(var(--primary)/0.6)] animate-scan-drift"
-              aria-hidden
-            />
-          )}
-        </div>
+        {!cameraDenied && (
+          <div className="absolute inset-10 pointer-events-none overflow-hidden">
+            <div className="absolute top-0 left-0 w-7 h-7 border-t-2 border-l-2 border-white rounded-tl-sm" />
+            <div className="absolute top-0 right-0 w-7 h-7 border-t-2 border-r-2 border-white rounded-tr-sm" />
+            <div className="absolute bottom-0 left-0 w-7 h-7 border-b-2 border-l-2 border-white rounded-bl-sm" />
+            <div className="absolute bottom-0 right-0 w-7 h-7 border-b-2 border-r-2 border-white rounded-br-sm" />
+            {!processing && (
+              <div
+                className="absolute left-0 right-0 top-1/2 h-[2px] bg-accent shadow-[0_0_10px_2px_rgb(var(--primary)/0.6)] animate-scan-drift"
+                aria-hidden
+              />
+            )}
+          </div>
+        )}
 
-        {/* Se pide el ticket entero, no un primer plano del número: las palabras
-            que lo rodean son las que permiten clasificar el origen. */}
-        <p className="text-white/50 text-xs text-center px-10 absolute bottom-8">
-          {t('scanner.readingHint')}
-        </p>
+        {cameraState === 'starting' && (
+          <Loader2 className="w-8 h-8 text-white/70 animate-spin" aria-hidden />
+        )}
+
+        {cameraDenied && (
+          <div className="px-10 text-center space-y-3">
+            <CameraOff className="w-10 h-10 mx-auto text-white/70" aria-hidden />
+            <p className="text-sm text-white/85">{t('scanner.errorPermission')}</p>
+          </div>
+        )}
 
         {processing && (
           <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center gap-3">
@@ -199,11 +273,17 @@ export function ScannerScreen() {
       </div>
 
       <div
-        className="px-6 pt-4 space-y-4"
+        className="px-6 pt-6 space-y-4 bg-gradient-to-t from-black/70 via-black/55 to-transparent"
         style={{ paddingBottom: 'calc(1.75rem + env(safe-area-inset-bottom))' }}
       >
+        {/* Se pide el ticket entero, no un primer plano del número: las palabras
+            que lo rodean son las que permiten clasificar el origen. Va bajo el
+            visor, no dentro: encima del encuadre se solapaba con las esquinas. */}
+        {!cameraDenied && !error && (
+          <p className="text-white/80 text-xs text-center">{t('scanner.readingHint')}</p>
+        )}
         {error && (
-          <p className="text-danger text-sm text-center" role="alert">
+          <p className="text-sm text-center text-white bg-danger/90 rounded-lg py-2 px-3" role="alert">
             {error}
           </p>
         )}
@@ -211,9 +291,9 @@ export function ScannerScreen() {
           <button
             type="button"
             onClick={handleScan}
-            disabled={processing}
+            disabled={processing || cameraDenied}
             aria-label={t('scanner.captureAria')}
-            className="w-16 h-16 rounded-full bg-white flex items-center justify-center transition-transform duration-150 active:scale-95 disabled:opacity-60"
+            className="w-16 h-16 rounded-full bg-white flex items-center justify-center transition-transform duration-150 active:scale-95 disabled:opacity-40"
           >
             {processing && <Loader2 className="w-6 h-6 text-ink animate-spin" aria-hidden />}
           </button>

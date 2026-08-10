@@ -60,6 +60,14 @@
     overscroll-behavior: none;
   }
 
+  /* La vista previa de la cámara se dibuja por detrás del WebView: mientras
+     está activa, ni el body ni el contenedor de React pueden pintar fondo o
+     taparían la imagen por completo. */
+  body.camera-active,
+  body.camera-active #root {
+    background-color: transparent;
+  }
+
   * {
     box-sizing: border-box;
   }

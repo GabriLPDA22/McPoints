@@ -1,9 +1,17 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { createRequire } from 'module';
+
+const { version } = createRequire(import.meta.url)('./package.json');
 
 export default defineConfig({
   plugins: [react()],
+  // Única fuente de la versión: package.json. Escrita a mano en la UI se
+  // quedaba desfasada en cada release.
+  define: {
+    __APP_VERSION__: JSON.stringify(version),
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

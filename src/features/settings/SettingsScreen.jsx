@@ -213,7 +213,9 @@ export function SettingsScreen() {
         </SettingsSection>
       </div>
 
-      <p className="text-center text-xs text-muted mt-auto pt-8 flex-shrink-0">McPoints v2.0.0</p>
+      <p className="text-center text-xs text-muted mt-auto pt-8 flex-shrink-0">
+        McPoints v{__APP_VERSION__}
+      </p>
 
       <BottomSheet
         open={themeSheetOpen}
@@ -273,7 +275,9 @@ export function SettingsScreen() {
           <p>{t('settings.aboutText1')}</p>
           <p>{t('settings.aboutText2')}</p>
           <p>{t('settings.aboutText3')}</p>
-          <p className="text-xs text-muted/80 pt-1">McPoints v2.0.0 · React + Capacitor</p>
+          <p className="text-xs text-muted/80 pt-1">
+            McPoints v{__APP_VERSION__} · React + Capacitor
+          </p>
         </div>
       </BottomSheet>
 

@@ -88,13 +88,99 @@ export function flattenRecognition(result, size) {
   return { lines, hasGeometry };
 }
 
-export async function captureAndRecognize(domain = DEFAULT_DOMAIN, rules = DEFAULT_RULES) {
-  const permission = await Camera.checkPermissions();
-  if (permission.camera !== 'granted') {
-    const req = await Camera.requestPermissions({ permissions: ['camera'] });
-    if (req.camera !== 'granted') {
-      throw new Error('PERMISSION_DENIED');
+/** Pasa una captura en base64 por el OCR y el motor de análisis. */
+async function recognize(base64, format, domain, rules) {
+  const mlkit = await loadMlKit();
+  let lines = [];
+  let hasGeometry = false;
+
+  if (mlkit && base64) {
+    try {
+      const [result, size] = await Promise.all([
+        mlkit.detectText({ base64Image: base64, rotation: 0 }),
+        readImageSize(base64, format),
+      ]);
+      ({ lines, hasGeometry } = flattenRecognition(result, size));
+    } catch (e) {
+      console.warn('ML Kit OCR failed', e);
     }
+  }
+
+  const analysis = analyzeTicket(lines, domain, rules);
+
+  return { ...analysis, blocks: lines, hasGeometry };
+}
+
+/**
+ * Pide el permiso de cámara. Se llama al abrir el escáner, no al disparar:
+ * si el diálogo del sistema apareciera al pulsar el botón, la pantalla se
+ * quedaría en negro sin explicar por qué.
+ */
+export async function ensureCameraPermission() {
+  const permission = await Camera.checkPermissions();
+  if (permission.camera === 'granted') return true;
+
+  const req = await Camera.requestPermissions({ permissions: ['camera'] });
+  return req.camera === 'granted';
+}
+
+/**
+ * Arranca la vista previa a pantalla completa por detrás del WebView. El HTML
+ * queda por delante (`toBack`), así que la pantalla del escáner debe volverse
+ * transparente mientras esté activa.
+ */
+export async function startCameraPreview() {
+  if (!Capacitor.isNativePlatform()) return false;
+
+  const { CameraPreview } = await import('@capacitor-community/camera-preview');
+
+  // Un preview anterior que no se cerró bien (navegación rápida, recarga en
+  // caliente) impide arrancar el siguiente.
+  try {
+    const started = await CameraPreview.isCameraStarted();
+    if (started?.value) await CameraPreview.stop();
+  } catch {
+    /* sin preview previo */
+  }
+
+  await CameraPreview.start({
+    position: 'rear',
+    toBack: true,
+    disableAudio: true,
+    lockAndroidOrientation: true,
+    width: window.screen.width,
+    height: window.screen.height,
+  });
+
+  return true;
+}
+
+export async function stopCameraPreview() {
+  if (!Capacitor.isNativePlatform()) return;
+
+  try {
+    const { CameraPreview } = await import('@capacitor-community/camera-preview');
+    await CameraPreview.stop();
+  } catch {
+    /* ya estaba parado */
+  }
+}
+
+/** Dispara sobre la vista previa ya activa, sin salir de la app. */
+export async function captureFromPreview(domain = DEFAULT_DOMAIN, rules = DEFAULT_RULES) {
+  const { CameraPreview } = await import('@capacitor-community/camera-preview');
+  const photo = await CameraPreview.capture({ quality: 90 });
+
+  return recognize(photo.value, 'jpeg', domain, rules);
+}
+
+/**
+ * Camino alternativo cuando no hay vista previa (navegador, o el plugin no
+ * arrancó): abre la cámara del sistema y analiza la foto resultante.
+ */
+export async function captureAndRecognize(domain = DEFAULT_DOMAIN, rules = DEFAULT_RULES) {
+  if (!(await ensureCameraPermission())) {
+    throw new Error('PERMISSION_DENIED');
   }
 
   const image = await Camera.getPhoto({
@@ -108,25 +194,7 @@ export async function captureAndRecognize(domain = DEFAULT_DOMAIN, rules = DEFAU
     promptLabelPhoto: 'Capturar',
   });
 
-  const mlkit = await loadMlKit();
-  let lines = [];
-  let hasGeometry = false;
-
-  if (mlkit && image.base64String) {
-    try {
-      const [result, size] = await Promise.all([
-        mlkit.detectText({ base64Image: image.base64String, rotation: 0 }),
-        readImageSize(image.base64String, image.format),
-      ]);
-      ({ lines, hasGeometry } = flattenRecognition(result, size));
-    } catch (e) {
-      console.warn('ML Kit OCR failed', e);
-    }
-  }
-
-  const analysis = analyzeTicket(lines, domain, rules);
-
-  return { ...analysis, blocks: lines, hasGeometry };
+  return recognize(image.base64String, image.format, domain, rules);
 }
 
 export async function triggerHaptic(type = 'success') {

@@ -1,0 +1,10 @@
+{
+  "blocks": [
+    { "text": "McDonald's", "boundingBox": { "top": 0.04, "left": 0.3, "width": 0.4, "height": 0.035 } },
+    { "text": "CODIGO REWARDS", "boundingBox": { "top": 0.12, "left": 0.24, "width": 0.52, "height": 0.03 } },
+    { "text": "4821", "boundingBox": { "top": 0.12, "left": 0.34, "width": 0.32, "height": 0.11 } },
+    { "text": "PEDIDO", "boundingBox": { "top": 0.44, "left": 0.36, "width": 0.28, "height": 0.03 } },
+    { "text": "62", "boundingBox": { "top": 0.49, "left": 0.42, "width": 0.16, "height": 0.06 } },
+    { "text": "7,15 €", "boundingBox": { "top": 0.88, "left": 0.62, "width": 0.24, "height": 0.035 } }
+  ]
+}

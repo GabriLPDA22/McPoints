@@ -1,0 +1,212 @@
+// English.
+export const en = {
+  locale: 'en-GB',
+
+  time: {
+    justNow: 'just now',
+    minutesAgo: (n) => `${n} min ago`,
+    today: 'Today',
+    yesterday: 'Yesterday',
+    daysAgo: (n) => `${n} days ago`,
+  },
+
+  common: {
+    cancel: 'Cancel',
+    confirm: 'Confirm',
+    close: 'Close',
+    back: 'Back',
+  },
+
+  nav: {
+    home: 'Home',
+    collection: 'Collection',
+    scanAria: 'Scan ticket',
+    history: 'History',
+    settings: 'Settings',
+    mainNavAria: 'Main navigation',
+  },
+
+  home: {
+    emptyTitle: 'Your collection starts with a ticket',
+    scanCta: 'Scan ticket',
+    manualEntry: 'Enter manually',
+    scanButton: 'Scan',
+    uniqueSingular: 'unique number',
+    uniquePlural: 'unique numbers',
+    newThisMonth: (n) => `+${n} this month`,
+    lastDiscovery: 'Last discovery',
+    byOrigin: 'By origin',
+    noOrigin: 'No origin',
+  },
+
+  collection: {
+    title: 'Collection',
+    emptyTitle: 'Your collection starts with a ticket',
+    emptyDescription: "Scan your next order's ticket to get started",
+    scanCta: 'Scan ticket',
+    searchPlaceholder: 'Search number...',
+    filterSort: 'Filter and sort',
+    noResultsTitle: 'No results',
+    noResultsDescription: 'Try another filter or search term',
+  },
+
+  filters: {
+    title: 'Filter and sort',
+    origin: 'Origin',
+    all: 'All',
+    unknown: 'Unknown',
+    digits: 'Digits',
+    order: 'Sort',
+    sortRecent: 'Most recent',
+    sortOldest: 'Oldest',
+    sortAsc: 'Ascending',
+    sortMostFound: 'Most found',
+    clear: 'Clear',
+    apply: 'Apply',
+  },
+
+  detail: {
+    notFoundTitle: 'Number not found',
+    notFoundDescription: "You may have removed it from your collection",
+    backToCollection: 'Back to collection',
+    backAria: 'Back',
+    discoveredOnce: 'Discovered 1 time',
+    discoveredTimes: (n) => `Discovered ${n} times`,
+    firstTimeOn: (date) => `First time on ${date}`,
+    origins: 'Origins',
+    missingOne: "You're missing 1 origin",
+    missingMany: (n) => `You're missing ${n} origins`,
+    history: 'History',
+    classifySightingAria: (n) => `Classify the sighting of ${n}`,
+    deleteConfirmOne: 'The sighting of this number will be deleted.',
+    deleteConfirmMany: (n) => `The ${n} sightings of this number will be deleted.`,
+    delete: 'Delete',
+    deleteFromCollection: 'Delete from collection',
+  },
+
+  history: {
+    title: 'History',
+    emptyTitle: 'No history',
+    emptyDescription: 'Your scans and manual entries will appear here',
+    filterAll: 'All',
+    filterClassified: 'With origin',
+    filterUnclassified: 'No origin',
+    today: 'Today',
+    yesterday: 'Yesterday',
+    newBadge: 'New',
+  },
+
+  settings: {
+    title: 'Settings',
+    appearance: 'Appearance',
+    theme: 'Theme',
+    language: 'Language',
+    themeLight: 'Light',
+    themeDark: 'Dark',
+    themeSystem: 'System',
+    data: 'Data',
+    exportCollection: 'Export collection',
+    importCollection: 'Import collection',
+    exportDataset: 'Export research dataset',
+    dangerZone: 'Danger zone',
+    resetCollection: 'Reset collection',
+    resetConfirm: "Delete all numbers? This can't be undone.",
+    about: 'About',
+    aboutMcPoints: 'About McPoints',
+    aboutText1:
+      "McPoints is not affiliated with McDonald's Corporation. It's an independent project for personal use.",
+    aboutText2: 'OCR is processed on-device: no ticket photo ever leaves your phone.',
+    aboutText3:
+      "We still don't know for certain how McDonald's generates order numbers, so McPoints stores the number exactly as it appears on the ticket and doesn't interpret it.",
+    toastExported: 'Collection exported',
+    toastDatasetExported: 'Dataset exported',
+    toastImported: 'Collection imported successfully',
+    toastInvalidFile: 'Invalid file',
+    toastReset: 'Collection reset',
+  },
+
+  scanner: {
+    frameTicket: 'Frame the ticket',
+    closeAria: 'Close',
+    readingHint: 'We read the number and where the order came from',
+    processing: 'Processing...',
+    captureAria: 'Capture',
+    manualEntryAria: 'Manual entry',
+    whichNumber: 'Which is the order number?',
+    manualNumberTitle: 'Manual number',
+    manualHint: 'Type the number exactly as it appears on the ticket, including leading zeros.',
+    confirm: 'Confirm',
+    errorInvalidNumber: "That number isn't valid.",
+    errorNoDetection: "We couldn't detect a number. Try again or enter it manually.",
+    errorPermission: 'Camera permission denied. Enable it in settings or use manual entry.',
+    errorGeneric: 'Error while scanning. Enter the number manually.',
+    errorManualRange: (min, max) => `Enter a number with ${min} to ${max} digits`,
+  },
+
+  scanResult: {
+    newDiscovery: 'New discovery',
+    newVariant: 'New variant',
+    alreadyHad: 'You already had it',
+    newSourceHint: "You already had this number: it's the first time you got it through this channel.",
+    gotOnce: 'Got it 1 time.',
+    gotTimes: (n) => `Got it ${n} times.`,
+    unknownSourceHint: "We couldn't identify how this order was placed.",
+    classify: 'Classify',
+    ticketLabel: (n) => `Ticket: ${n}`,
+    viewNumber: 'View number',
+    scanAnother: 'Scan another',
+  },
+
+  sourcePicker: {
+    title: 'How did you place this order?',
+    dontKnow: "I don't know",
+  },
+
+  sourceChecklist: {
+    gotTimesAria: (label, count) => `${label}: obtained ${count} ${count === 1 ? 'time' : 'times'}`,
+    pendingAria: 'pending',
+  },
+
+  discoveryCell: {
+    ariaSingle: (num, label) => `Number ${num}, origin ${label}`,
+    ariaMulti: (num, label, count) => `Number ${num}, origin ${label}, ${count} different origins`,
+  },
+
+  languagePicker: {
+    title: 'Language',
+  },
+
+  taxonomy: {
+    source: {
+      kiosk: { label: 'Kiosk', shortLabel: 'Kiosk' },
+      counter: { label: 'Counter', shortLabel: 'Counter' },
+      mobileApp: { label: 'App', shortLabel: 'App' },
+      driveThru: { label: 'Drive-thru', shortLabel: 'Drive-thru' },
+      delivery: { label: 'Delivery', shortLabel: 'Delivery' },
+      other: { label: 'Other channel', shortLabel: 'Other' },
+      unknown: { label: 'Unknown origin', shortLabel: 'No origin' },
+    },
+    fulfillment: {
+      eatIn: { label: 'Eat in', shortLabel: 'Eat in' },
+      takeAway: { label: 'Takeaway', shortLabel: 'Takeaway' },
+      tableService: { label: 'Table service', shortLabel: 'Table' },
+      counterPickup: { label: 'Counter pickup', shortLabel: 'Counter' },
+      driveThruPickup: { label: 'Drive-thru pickup', shortLabel: 'Drive-thru' },
+      parkingPickup: { label: 'Parking pickup', shortLabel: 'Parking' },
+      delivery: { label: 'Home delivery', shortLabel: 'Delivery' },
+      unknown: { label: 'Unknown delivery', shortLabel: 'No data' },
+    },
+    payment: {
+      card: { label: 'Card', shortLabel: 'Card' },
+      cash: { label: 'Cash', shortLabel: 'Cash' },
+      mobilePay: { label: 'Mobile payment', shortLabel: 'Mobile' },
+    },
+    method: {
+      ocr: 'Scanned',
+      manual: 'Manual',
+      migrated: 'Imported from the previous version',
+      imported: 'Imported',
+    },
+    dontKnow: "I don't know",
+  },
+};

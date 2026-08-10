@@ -1,9 +1,17 @@
 {
-  "appId": "com.yourname.mcpoints",
+  "appId": "com.mcpoints.app",
   "appName": "McPoints",
   "webDir": "build",
   "bundledWebRuntime": false,
   "server": {
     "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": false,
+      "launchFadeOutDuration": 200,
+      "backgroundColor": "#FAFAF8",
+      "androidSplashResourceName": "splash"
+    }
   }
 }

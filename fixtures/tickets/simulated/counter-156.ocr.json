@@ -1,0 +1,8 @@
+{
+  "blocks": [
+    { "text": "ORDER 156", "confidence": 0.94, "boundingBox": { "top": 0.12, "left": 0.3, "width": 0.4, "height": 0.06 } },
+    { "text": "TAKE AWAY", "confidence": 0.9, "boundingBox": { "top": 0.22, "left": 0.35, "width": 0.3, "height": 0.03 } },
+    { "text": "Ticket: 847291", "confidence": 0.85, "boundingBox": { "top": 0.75, "left": 0.1, "width": 0.4, "height": 0.03 } },
+    { "text": "8,99 €", "confidence": 0.92, "boundingBox": { "top": 0.88, "left": 0.65, "width": 0.2, "height": 0.04 } }
+  ]
+}

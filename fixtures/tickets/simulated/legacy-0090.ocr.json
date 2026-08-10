@@ -1,0 +1,7 @@
+{
+  "blocks": [
+    { "text": "PEDIDO", "confidence": 0.94, "boundingBox": { "top": 0.14, "left": 0.34, "width": 0.32, "height": 0.03 } },
+    { "text": "0090", "confidence": 0.95, "boundingBox": { "top": 0.19, "left": 0.38, "width": 0.24, "height": 0.07 } },
+    { "text": "4,50 €", "confidence": 0.91, "boundingBox": { "top": 0.86, "left": 0.62, "width": 0.22, "height": 0.04 } }
+  ]
+}

@@ -52,18 +52,18 @@
 <table>
   <tr>
     <td width="50%">
-      <h3>🎯 Registro Completo</h3>
-      <p>Visualiza y gestiona toda tu colección del 000 al 999 en una interfaz intuitiva diseñada para coleccionistas.</p>
+      <h3>🎯 Galería de Descubrimientos</h3>
+      <p>Cada número que encuentras entra en tu colección tal y como aparece en el ticket, de 1 a 4 dígitos. Nada de rellenos ni recortes.</p>
     </td>
     <td width="50%">
-      <h3>📊 Estadísticas en Tiempo Real</h3>
-      <p>Observa cómo tu colección crece con métricas detalladas que muestran tu progreso y logros.</p>
+      <h3>🏪 Contexto de cada Pedido</h3>
+      <p>McPoints reconoce de dónde salió el pedido (kiosco, caja, app, McAuto, delivery) y cómo se entregó, y lo guarda junto al número.</p>
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <h3>🔍 Búsqueda Instantánea</h3>
-      <p>Localiza cualquier número en segundos con nuestro potente sistema de búsqueda y filtrado avanzado (todos, conseguidos, pendientes).</p>
+      <h3>🔍 Búsqueda y Filtros</h3>
+      <p>Localiza cualquier número al instante y filtra tu colección por el origen del pedido.</p>
     </td>
     <td width="50%">
       <h3>💾 Guardado Local Seguro</h3>
@@ -76,9 +76,27 @@
 
 <div align="center">
 
-Usa la **función de escaneo** integrada para añadir números automáticamente a tu colección capturándolos desde los tickets con la cámara de tu dispositivo.
+Encuadra el **ticket completo** con la cámara. McPoints lee el número de pedido y, además, busca en el resto del texto las pistas que le dicen de dónde salió el pedido y cómo se entregó.
 
 </div>
+
+## 🎲 El mismo número, por vías distintas
+
+Conseguir el `2323` en un kiosco y volver a conseguirlo en el McAuto no son dos números
+repetidos: es un número con dos orígenes. Cada número lleva su propia lista de canales
+pendientes, y completarla es la mecánica de colección.
+
+## 🔬 Lo que McPoints no hace
+
+McDonald's no publica cómo genera los números de pedido. Hay una hipótesis razonable —que
+`2323` sea el terminal 23 con el pedido 23— pero **no está confirmada**, así que la app
+**no la aplica**: guarda y muestra el número exactamente como está impreso. Si no puede
+determinar el origen de un pedido, dice "desconocido" en lugar de adivinar.
+
+Toda la investigación, con su nivel de confianza y sus fuentes, está en
+[`Docs/research/domain-findings.md`](Docs/research/domain-findings.md), y el criterio que
+haría falta para activar esa interpretación está fijado por adelantado en
+[`Docs/research/hypothesis-validation.md`](Docs/research/hypothesis-validation.md).
 
 ## 💎 Tecnología Destacada
 
@@ -97,8 +115,8 @@ Usa la **función de escaneo** integrada para añadir números automáticamente 
 
 -   **Interfaz Moderna**: Sistema de diseño elegante y funcional.
 -   **Navegación Simple**: Accede a cualquier función con un máximo de 2 toques.
--   **Filtros Potentes**: Visualiza tus números como prefieras: todos, conseguidos o pendientes.
--   **Totalmente Personalizable**: Adapta la experiencia a tus necesidades (si aplica).
+-   **Filtros por Origen**: Mira tu colección entera o solo lo conseguido por kiosco, caja, app, McAuto o delivery.
+-   **Modo Claro y Oscuro**: Con la información nunca codificada solo en el color.
 
 ## 🔧 Requisitos del Sistema
 

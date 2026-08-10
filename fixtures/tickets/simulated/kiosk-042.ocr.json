@@ -1,0 +1,9 @@
+{
+  "blocks": [
+    { "text": "McDonald's", "confidence": 0.92, "boundingBox": { "top": 0.05, "left": 0.2, "width": 0.6, "height": 0.04 } },
+    { "text": "PEDIDO", "confidence": 0.95, "boundingBox": { "top": 0.15, "left": 0.35, "width": 0.3, "height": 0.03 } },
+    { "text": "042", "confidence": 0.97, "boundingBox": { "top": 0.2, "left": 0.4, "width": 0.2, "height": 0.08 } },
+    { "text": "09/08/2026 14:32", "confidence": 0.88, "boundingBox": { "top": 0.35, "left": 0.25, "width": 0.5, "height": 0.03 } },
+    { "text": "12,50 €", "confidence": 0.91, "boundingBox": { "top": 0.85, "left": 0.6, "width": 0.25, "height": 0.04 } }
+  ]
+}

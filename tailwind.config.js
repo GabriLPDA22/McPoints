@@ -1,30 +1,44 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+export default {
+  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['"Inter"', 'system-ui', 'sans-serif'],
+        display: ['"Inter"', 'system-ui', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+      },
       colors: {
-        // Colores personalizados para el tema oscuro con neón
-        zinc: {
-          700: "#3f3f46",
-          800: "#27272a",
-          900: "#18181b",
-        },
-        fuchsia: {
-          500: "#d946ef",
-          600: "#c026d3",
-          900: "#701a75",
-        },
-        purple: {
-          500: "#a855f7",
-          600: "#9333ea",
-          800: "#6b21a8",
-          900: "#581c87",
-        },
+        bg: 'rgb(var(--bg) / <alpha-value>)',
+        surface: 'rgb(var(--surface) / <alpha-value>)',
+        raised: 'rgb(var(--surface-raised) / <alpha-value>)',
+        border: 'rgb(var(--border) / <alpha-value>)',
+        ink: 'rgb(var(--text) / <alpha-value>)',
+        muted: 'rgb(var(--text-muted) / <alpha-value>)',
+        subtle: 'rgb(var(--text-subtle) / <alpha-value>)',
+        accent: 'rgb(var(--primary) / <alpha-value>)',
+        'accent-strong': 'rgb(var(--primary-strong) / <alpha-value>)',
+        'on-accent': 'rgb(var(--on-primary) / <alpha-value>)',
+        gold: 'rgb(var(--gold) / <alpha-value>)',
+        'gold-ink': 'rgb(var(--gold-ink) / <alpha-value>)',
+        success: 'rgb(var(--success) / <alpha-value>)',
+        danger: 'rgb(var(--danger) / <alpha-value>)',
+      },
+      borderRadius: {
+        xs: '6px',
+        sm: '10px',
+        md: '14px',
+        lg: '20px',
+        xl: '20px',
       },
       boxShadow: {
-        neon: "0 0 15px rgba(192, 38, 211, 0.5)",
-        "neon-hover": "0 0 25px rgba(192, 38, 211, 0.7)",
+        // Elevación mínima: solo para bottom sheets/diálogos (level2). Las
+        // cards y superficies normales se distinguen por borde de 1px, no
+        // por sombra.
+        soft: '0 -2px 16px -4px rgba(20, 19, 19, 0.10)',
+        card: '0 1px 2px 0 rgba(20, 19, 19, 0.04)',
+        // Reservado exclusivamente al FAB de escanear (level3).
+        glow: '0 4px 14px -2px rgb(var(--primary) / 0.35)',
       },
     },
   },

@@ -1,0 +1,273 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*
+   * Tokens en canal RGB (space-separated) para que Tailwind pueda aplicar
+   * modificadores de opacidad (bg-accent/15, etc.) sobre variables CSS.
+   * :root = identidad clara (principal, "El Recibo"). .dark = variante oscura,
+   * traducción fiel del mismo lenguaje, no una segunda personalidad.
+   */
+  :root {
+    --bg: 250 250 248;
+    --surface: 255 255 255;
+    --surface-raised: 241 238 232;
+    --border: 231 227 217;
+    --text: 28 25 23;
+    --text-muted: 110 101 90;
+    --text-subtle: 167 156 140;
+    --primary: 229 67 53;
+    --primary-strong: 198 54 38;
+    --on-primary: 255 255 255;
+    --gold: 214 161 37;
+    /* Variante de texto: el dorado decorativo (--gold) no llega a 4.5:1 sobre
+       blanco. Para copy real (deltas, titulares) se usa este tono más oscuro
+       que conserva el matiz dorado pero cumple contraste AA. */
+    --gold-ink: 156 107 18;
+    --success: 46 139 87;
+    --danger: 198 54 42;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .dark {
+    --bg: 20 19 19;
+    --surface: 28 27 25;
+    --surface-raised: 42 40 37;
+    --border: 46 44 40;
+    --text: 245 241 233;
+    --text-muted: 167 158 144;
+    --text-subtle: 116 106 92;
+    --primary: 255 90 70;
+    --primary-strong: 229 87 63;
+    --on-primary: 255 255 255;
+    --gold: 232 184 75;
+    /* En oscuro el dorado decorativo ya cumple contraste de sobra como texto. */
+    --gold-ink: 232 184 75;
+    --success: 76 175 110;
+    --danger: 229 86 74;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply font-sans antialiased;
+    background-color: rgb(var(--bg));
+    color: rgb(var(--text));
+    min-height: 100dvh;
+    overscroll-behavior: none;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  .app-shell {
+    @apply flex flex-col min-h-dvh max-w-lg mx-auto;
+    padding-bottom: calc(80px + var(--safe-bottom));
+  }
+
+  .screen-padding {
+    @apply px-5 py-5;
+  }
+
+  /* Alto real disponible bajo el header y por encima del nav inferior fijo
+     (mismo cálculo que la reserva de .app-shell). Se usa para repartir el
+     contenido en pantallas vacías/cortas en vez de dejarlo pegado arriba con
+     una franja muerta debajo — el mismo "choque" entre pantallas que aparece
+     si cada una define su propio alto a mano. */
+  .screen-fill {
+    min-height: calc(100dvh - 80px - var(--safe-bottom));
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Tipografía de interfaz: sigue siendo Inter en todos los tamaños.
+     Se conserva el nombre de clase por compatibilidad con las pantallas
+     existentes; ya no referencia ninguna serif. */
+  .font-display {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 600;
+  }
+
+  /* Escala tipográfica del design system (Dirección 1 — "El Recibo"). */
+  .text-display-lg {
+    @apply font-sans font-semibold tracking-tight;
+    font-size: 34px;
+    line-height: 40px;
+  }
+
+  .text-display-md {
+    @apply font-sans font-semibold tracking-tight;
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  .text-heading-lg {
+    @apply font-sans font-semibold;
+    font-size: 20px;
+    line-height: 26px;
+  }
+
+  .text-heading-md {
+    @apply font-sans font-medium;
+    font-size: 17px;
+    line-height: 22px;
+  }
+
+  .text-body-lg {
+    @apply font-sans font-normal;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .text-body-md {
+    @apply font-sans font-normal;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .text-label {
+    @apply font-sans font-medium uppercase;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: 0.04em;
+  }
+
+  .text-caption {
+    @apply font-sans font-normal;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  /* Números: siempre en mono, siempre tabulares. Reservados a cifras de
+     pedido/estadísticas — nunca a labels, botones ni copy de estado. */
+  .text-number-hero {
+    @apply font-mono font-medium tabular-nums;
+    font-size: clamp(40px, 15vw, 60px);
+    line-height: 1;
+  }
+
+  .text-number-lg {
+    @apply font-mono font-medium tabular-nums;
+    font-size: 28px;
+    line-height: 1.1;
+  }
+
+  .text-number-sm {
+    @apply font-mono font-medium tabular-nums;
+    font-size: 16px;
+    line-height: 1.2;
+  }
+
+  /* Muesca de esquina tipo ticket: corta la esquina superior derecha en
+     diagonal en vez de un icono decorativo o una perforación repetida. */
+  .ticket-notch {
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  }
+}
+
+@layer utilities {
+  .animate-slide-up {
+    animation: slideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.35s ease-out;
+  }
+
+  .animate-pop {
+    animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .animate-scan-drift {
+    animation: scanDrift 2.4s ease-in-out infinite;
+  }
+
+  .animate-splash-sweep {
+    animation: splashSweep 0.42s ease-in-out forwards;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes scanDrift {
+  0%,
+  100% {
+    transform: translateY(-46px);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateY(46px);
+    opacity: 1;
+  }
+}
+
+@keyframes splashSweep {
+  0% {
+    transform: translateX(-120%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

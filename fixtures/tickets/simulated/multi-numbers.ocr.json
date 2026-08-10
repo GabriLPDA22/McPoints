@@ -1,0 +1,10 @@
+{
+  "blocks": [
+    { "text": "Nº PEDIDO", "confidence": 0.93, "boundingBox": { "top": 0.1, "left": 0.32, "width": 0.36, "height": 0.03 } },
+    { "text": "089", "confidence": 0.96, "boundingBox": { "top": 0.16, "left": 0.42, "width": 0.16, "height": 0.07 } },
+    { "text": "REG 03", "confidence": 0.87, "boundingBox": { "top": 0.28, "left": 0.1, "width": 0.2, "height": 0.03 } },
+    { "text": "Tienda 1054", "confidence": 0.84, "boundingBox": { "top": 0.32, "left": 0.1, "width": 0.3, "height": 0.03 } },
+    { "text": "15/07/2026", "confidence": 0.89, "boundingBox": { "top": 0.4, "left": 0.1, "width": 0.25, "height": 0.03 } },
+    { "text": "21,00 €", "confidence": 0.9, "boundingBox": { "top": 0.82, "left": 0.55, "width": 0.3, "height": 0.04 } }
+  ]
+}

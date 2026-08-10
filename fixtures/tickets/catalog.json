@@ -1,0 +1,167 @@
+{
+  "version": 2,
+  "domain": {
+    "minDigits": 1,
+    "maxDigits": 4
+  },
+  "notes": [
+    "groundTruth es lo que realmente ocurrió, según quien recogió el ticket.",
+    "expected es lo que el motor DEBE producir hoy. Si groundTruth tiene un valor y expected dice UNKNOWN, es un hueco conocido de las reglas, no un fallo del test.",
+    "observedTerminal y observedSequence solo se rellenan por observación directa (p.ej. anotando qué kiosco físico se usó). Nunca se deducen del número.",
+    "Ver Docs/research/hypothesis-validation.md"
+  ],
+  "entries": [
+    {
+      "id": "sim-kiosk-2323",
+      "file": null,
+      "ocrFixture": "simulated/kiosk-2323.ocr.json",
+      "country": "ES",
+      "city": null,
+      "restaurant": null,
+      "simulated": true,
+      "groundTruth": {
+        "rawNumber": "2323",
+        "orderSource": "KIOSK",
+        "fulfillment": "EAT_IN",
+        "paymentMethod": "CARD",
+        "observedTerminal": null,
+        "observedSequence": null,
+        "verifiedByUser": true
+      },
+      "expected": {
+        "rawNumber": "2323",
+        "source": "KIOSK",
+        "fulfillment": "EAT_IN",
+        "payment": "CARD"
+      },
+      "notes": "Reconstrucción del caso real que motiva el rediseño: kiosco, pago con tarjeta, número 2323. El terminal NO se anota porque no se observó directamente."
+    },
+    {
+      "id": "sim-app-code-distractor",
+      "file": null,
+      "ocrFixture": "simulated/app-code-distractor.ocr.json",
+      "country": "ES",
+      "city": null,
+      "restaurant": null,
+      "simulated": true,
+      "groundTruth": {
+        "rawNumber": "62",
+        "orderSource": "UNKNOWN",
+        "fulfillment": "UNKNOWN",
+        "paymentMethod": "UNKNOWN",
+        "observedTerminal": null,
+        "observedSequence": null,
+        "verifiedByUser": false
+      },
+      "expected": {
+        "rawNumber": "62",
+        "source": "UNKNOWN",
+        "fulfillment": "UNKNOWN",
+        "payment": "UNKNOWN",
+        "mustNotDetect": ["4821"]
+      },
+      "notes": "El código de recompensas de la app está impreso más grande que el número de pedido. Comprueba que el tamaño no gana a la etiqueta descalificadora."
+    },
+    {
+      "id": "sim-kiosk-042",
+      "file": null,
+      "ocrFixture": "simulated/kiosk-042.ocr.json",
+      "country": "ES",
+      "city": "Madrid",
+      "restaurant": null,
+      "simulated": true,
+      "groundTruth": {
+        "rawNumber": "042",
+        "orderSource": "KIOSK",
+        "fulfillment": "UNKNOWN",
+        "paymentMethod": "UNKNOWN",
+        "observedTerminal": null,
+        "observedSequence": null,
+        "verifiedByUser": false
+      },
+      "expected": {
+        "rawNumber": "042",
+        "source": "UNKNOWN",
+        "fulfillment": "UNKNOWN",
+        "payment": "UNKNOWN"
+      },
+      "notes": "Hueco conocido: el ticket no menciona el canal, así que el motor no puede saber que fue kiosco. El cero a la izquierda se conserva."
+    },
+    {
+      "id": "sim-counter-156",
+      "file": null,
+      "ocrFixture": "simulated/counter-156.ocr.json",
+      "country": "ES",
+      "city": "Barcelona",
+      "restaurant": null,
+      "simulated": true,
+      "groundTruth": {
+        "rawNumber": "156",
+        "orderSource": "COUNTER",
+        "fulfillment": "TAKE_AWAY",
+        "paymentMethod": "UNKNOWN",
+        "observedTerminal": null,
+        "observedSequence": null,
+        "verifiedByUser": false
+      },
+      "expected": {
+        "rawNumber": "156",
+        "source": "UNKNOWN",
+        "fulfillment": "TAKE_AWAY",
+        "payment": "UNKNOWN",
+        "mustNotDetect": ["847291"]
+      },
+      "notes": "La entrega sí es detectable por TAKE AWAY; el canal no. El número de ticket fiscal debe quedar excluido."
+    },
+    {
+      "id": "sim-multi-089",
+      "file": null,
+      "ocrFixture": "simulated/multi-numbers.ocr.json",
+      "country": "ES",
+      "city": "Valencia",
+      "restaurant": null,
+      "simulated": true,
+      "groundTruth": {
+        "rawNumber": "089",
+        "orderSource": "UNKNOWN",
+        "fulfillment": "UNKNOWN",
+        "paymentMethod": "UNKNOWN",
+        "observedTerminal": null,
+        "observedSequence": null,
+        "verifiedByUser": false
+      },
+      "expected": {
+        "rawNumber": "089",
+        "source": "UNKNOWN",
+        "fulfillment": "UNKNOWN",
+        "payment": "UNKNOWN"
+      },
+      "notes": "Precio y fecha como distractores."
+    },
+    {
+      "id": "sim-legacy-0090",
+      "file": null,
+      "ocrFixture": "simulated/legacy-0090.ocr.json",
+      "country": "ES",
+      "city": "Sevilla",
+      "restaurant": null,
+      "simulated": true,
+      "groundTruth": {
+        "rawNumber": "0090",
+        "orderSource": "UNKNOWN",
+        "fulfillment": "UNKNOWN",
+        "paymentMethod": "UNKNOWN",
+        "observedTerminal": null,
+        "observedSequence": null,
+        "verifiedByUser": false
+      },
+      "expected": {
+        "rawNumber": "0090",
+        "source": "UNKNOWN",
+        "fulfillment": "UNKNOWN",
+        "payment": "UNKNOWN"
+      },
+      "notes": "Cuatro dígitos con ceros a la izquierda. La v1 lo guardaba como 090; ahora se conserva íntegro."
+    }
+  ]
+}

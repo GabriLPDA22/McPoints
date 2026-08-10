@@ -5,17 +5,26 @@ import { useTranslation } from '@/core/i18n/useTranslation.js';
 export function BottomSheet({ open, onClose, title, children, showCancel = true }) {
   const { t } = useTranslation();
   const panelRef = useRef(null);
+  // El cierre se lee desde una ref para que el efecto dependa solo de `open`.
+  // Con `onClose` en las dependencias, cualquier padre que pase una función
+  // nueva en cada render relanzaba el efecto en cada pulsación de tecla.
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) return undefined;
 
     const previouslyFocused = document.activeElement;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    panelRef.current?.focus();
+
+    // Solo se mueve el foco al panel si el contenido no lo tiene ya (un input
+    // con autoFocus, por ejemplo): quitárselo cierra el teclado del móvil.
+    const panel = panelRef.current;
+    if (panel && !panel.contains(document.activeElement)) panel.focus();
 
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose?.();
+      if (e.key === 'Escape') onCloseRef.current?.();
     };
     document.addEventListener('keydown', handleKeyDown);
 
@@ -24,7 +33,7 @@ export function BottomSheet({ open, onClose, title, children, showCancel = true 
       document.removeEventListener('keydown', handleKeyDown);
       previouslyFocused?.focus?.();
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 

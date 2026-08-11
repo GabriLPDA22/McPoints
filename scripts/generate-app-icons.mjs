@@ -111,16 +111,16 @@ async function main() {
 
   await renderSplash({
     canvasSize: 2732,
-    bg: PALETTE.bgLight,
-    iconColor: PALETTE.primaryLight,
+    bg: PALETTE.bgDark,
+    iconColor: PALETTE.primaryDark,
     file: 'splash.png',
   });
 
   await renderSplash({
     canvasSize: 2732,
-    bg: PALETTE.bgDark,
-    iconColor: PALETTE.primaryDark,
-    file: 'splash-dark.png',
+    bg: PALETTE.bgLight,
+    iconColor: PALETTE.primaryLight,
+    file: 'splash-light.png',
   });
 }
 

@@ -10,7 +10,7 @@
     "SplashScreen": {
       "launchAutoHide": false,
       "launchFadeOutDuration": 200,
-      "backgroundColor": "#FAFAF8",
+      "backgroundColor": "#141313",
       "androidSplashResourceName": "splash"
     }
   }

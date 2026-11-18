@@ -1,0 +1,105 @@
+# Compila el APK y lo publica como asset de la release de GitHub.
+#
+# Se dispara al subir un tag `vX.Y.Z` (o a mano desde la pestaña Actions).
+# El APK se nombra McPoints-X.Y.Z.apk, que es el enlace que usa el README.
+#
+# Firma: los APK publicados se firman con el debug.keystore del autor. Debe
+# estar en el secret DEBUG_KEYSTORE_BASE64; si la clave cambia, Android no
+# instala la nueva versión encima de la anterior y el usuario tendría que
+# desinstalar (perdiendo su colección). Por eso, sin secret el job falla, salvo
+# que se lance a mano con `allow_new_key` activado de forma explícita.
+name: Release APK
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag de la release (p. ej. v2.0.5)'
+        required: true
+      allow_new_key:
+        description: 'Firmar con una clave nueva si no hay DEBUG_KEYSTORE_BASE64 (rompe las actualizaciones)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.event.inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref }}
+
+      - name: Comprobar que el tag coincide con la versión
+        run: |
+          VERSION="${TAG#v}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          PKG=$(node -p "require('./package.json').version")
+          GRADLE=$(sed -n 's/.*versionName "\(.*\)".*/\1/p' android/app/build.gradle)
+          if [ "$PKG" != "$VERSION" ] || [ "$GRADLE" != "$VERSION" ]; then
+            echo "::error::Tag $TAG no coincide con package.json ($PKG) / build.gradle ($GRADLE)"
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - name: Restaurar keystore de firma
+        env:
+          DEBUG_KEYSTORE_BASE64: ${{ secrets.DEBUG_KEYSTORE_BASE64 }}
+          ALLOW_NEW_KEY: ${{ github.event.inputs.allow_new_key || 'false' }}
+        run: |
+          mkdir -p ~/.android
+          if [ -n "$DEBUG_KEYSTORE_BASE64" ]; then
+            echo "$DEBUG_KEYSTORE_BASE64" | base64 -d > ~/.android/debug.keystore
+            keytool -list -keystore ~/.android/debug.keystore -storepass android -alias androiddebugkey > /dev/null
+            echo "Keystore restaurado."
+          elif [ "$ALLOW_NEW_KEY" = "true" ]; then
+            echo "::warning::Sin DEBUG_KEYSTORE_BASE64: se firma con una clave nueva. No actualizará instalaciones previas."
+          else
+            echo "::error::Falta el secret DEBUG_KEYSTORE_BASE64. Ver .github/workflows/release-apk.yml"
+            exit 1
+          fi
+
+      - name: Instalar dependencias y sincronizar Capacitor
+        run: |
+          npm ci
+          npm test
+          npm run cap:sync
+
+      - name: Compilar APK
+        working-directory: android
+        run: bash ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Preparar asset y notas
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk "McPoints-$VERSION.apk"
+          NOTES=".github/release-notes/$TAG.md"
+          [ -f "$NOTES" ] || echo "McPoints $VERSION" > "$NOTES"
+          echo "NOTES=$NOTES" >> "$GITHUB_ENV"
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG }}
+          name: McPoints ${{ env.VERSION }}
+          body_path: ${{ env.NOTES }}
+          files: McPoints-${{ env.VERSION }}.apk
+          fail_on_unmatched_files: true

@@ -50,7 +50,7 @@ jobs:
           PKG=$(node -p "require('./package.json').version")
           GRADLE=$(sed -n 's/.*versionName "\(.*\)".*/\1/p' android/app/build.gradle)
           if [ "$PKG" != "$VERSION" ] || [ "$GRADLE" != "$VERSION" ]; then
-            echo "::error::Tag $TAG no coincide con package.json ($PKG) / build.gradle ($GRADLE)"
+            echo "::error::Tag $TAG no coincide con package.json ($PKG) / build.gradle ($GRADLE). Vuelve a lanzarlo con el tag v$PKG (versión completa X.Y.Z)."
             exit 1
           fi
 

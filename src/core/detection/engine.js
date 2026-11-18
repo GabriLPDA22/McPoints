@@ -57,7 +57,32 @@ export function isExcludedBlock(text) {
   if (/\d{1,2}[/.-]\d{1,2}[/.-]\d{2,4}/.test(text)) return true;
   if (/\d{1,2}:\d{2}/.test(text)) return true;
   if (/\d{5,}/.test(text.replace(/\s/g, ''))) return true;
+  if (isItemLine(upper)) return true;
   return false;
+}
+
+/**
+ * Línea de artículo: cantidad seguida del producto («1 PATATAS GR»,
+ * «2 COCA-COLA»). El número es una cantidad, no un pedido. Observado en el
+ * ticket real de fixtures/tickets/real/es-mahon-counter-004.
+ */
+function isItemLine(upper) {
+  if (containsAny(upper, ORDER_LABELS)) return false;
+  return /^\d{1,2} [A-Z][A-Z-]{2,}/.test(upper);
+}
+
+/**
+ * Dígitos pegados a letras dentro del mismo token («MJTHM6-FMWCM-C37PP4», el
+ * código de encuesta): no son un número de pedido. Se admite un prefijo «N»,
+ * «NO» o «#» delante (`N123`, `#123`).
+ */
+function isEmbeddedInCode(text, index, length) {
+  const before = text.slice(0, index);
+  const after = text.slice(index + length);
+  const letterAfter = /^[A-Za-z]/.test(after);
+  const prefix = before.match(/[A-Za-zº#]+$/)?.[0] ?? '';
+  const allowedPrefix = /^(N|NO|Nº|#)$/i.test(prefix);
+  return letterAfter || (prefix.length > 0 && !allowedPrefix);
 }
 
 function boxOf(block) {
@@ -135,9 +160,10 @@ export function rankCandidates(blocks = [], domain = DEFAULT_DOMAIN, rules = DEF
     if (isExcludedBlock(block.text)) continue;
     if (sharesLineWithDisqualifier(block, blocks)) continue;
 
-    const matches = block.text.match(/\d+/g) ?? [];
+    for (const found of block.text.matchAll(/\d+/g)) {
+      const match = found[0];
+      if (isEmbeddedInCode(block.text, found.index, match.length)) continue;
 
-    for (const match of matches) {
       const value = normalizeRawNumber(match, domain);
       if (!value) continue;
 

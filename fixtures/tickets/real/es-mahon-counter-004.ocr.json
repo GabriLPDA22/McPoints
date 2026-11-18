@@ -1,0 +1,30 @@
+{
+  "_source": "Transcripción de una foto real aportada por el usuario (Mahón, 14/09/2022). Cajas aproximadas a partir de la imagen.",
+  "blocks": [
+    { "text": "004", "boundingBox": { "top": 0.004, "left": 0.3, "width": 0.4, "height": 0.04 } },
+    { "text": "Valora tu visita en", "boundingBox": { "top": 0.079, "left": 0.3, "width": 0.4, "height": 0.011 } },
+    { "text": "www.opinamcdonalds.com", "boundingBox": { "top": 0.089, "left": 0.25, "width": 0.5, "height": 0.011 } },
+    { "text": "dentro de los 7 dias siguientes", "boundingBox": { "top": 0.099, "left": 0.2, "width": 0.6, "height": 0.011 } },
+    { "text": "a la fecha del ticket.", "boundingBox": { "top": 0.109, "left": 0.3, "width": 0.4, "height": 0.011 } },
+    { "text": "Utiliza el codigo de unica lectura:", "boundingBox": { "top": 0.119, "left": 0.15, "width": 0.7, "height": 0.011 } },
+    { "text": "MJTHM6-FMWCM-C37PP4", "boundingBox": { "top": 0.142, "left": 0.25, "width": 0.5, "height": 0.011 } },
+    { "text": "O escanea el codigo QR", "boundingBox": { "top": 0.167, "left": 0.25, "width": 0.5, "height": 0.011 } },
+    { "text": "Restaurante McDonald's", "boundingBox": { "top": 0.215, "left": 0.25, "width": 0.5, "height": 0.011 } },
+    { "text": "Mahon Poima", "boundingBox": { "top": 0.225, "left": 0.35, "width": 0.3, "height": 0.011 } },
+    { "text": "Fast Food Fun SL", "boundingBox": { "top": 0.235, "left": 0.33, "width": 0.34, "height": 0.011 } },
+    { "text": "CIF: B 579 95 136", "boundingBox": { "top": 0.245, "left": 0.3, "width": 0.4, "height": 0.011 } },
+    { "text": "FACTURA SIMPLIFICADA", "boundingBox": { "top": 0.325, "left": 0.3, "width": 0.4, "height": 0.011 } },
+    { "text": "Num: 0122200120209000022", "boundingBox": { "top": 0.335, "left": 0.2, "width": 0.6, "height": 0.011 } },
+    { "text": "Num Pedido: 03", "boundingBox": { "top": 0.375, "left": 0.3, "width": 0.4, "height": 0.011 } },
+    { "text": "CAJA 1- 14/09/2022 14:19:45", "boundingBox": { "top": 0.385, "left": 0.25, "width": 0.7, "height": 0.011 } },
+    { "text": "AN ARTICULO TOTAL", "boundingBox": { "top": 0.418, "left": 0.0, "width": 1.0, "height": 0.011 } },
+    { "text": "1 MCPOLLO 4.70", "boundingBox": { "top": 0.438, "left": 0.0, "width": 1.0, "height": 0.011 } },
+    { "text": "1 MCROYAL 4.80", "boundingBox": { "top": 0.448, "left": 0.0, "width": 1.0, "height": 0.011 } },
+    { "text": "1 MENU GR BIGMAC 8.20", "boundingBox": { "top": 0.458, "left": 0.0, "width": 1.0, "height": 0.011 } },
+    { "text": "1 PATATAS GR", "boundingBox": { "top": 0.468, "left": 0.05, "width": 0.5, "height": 0.011 } },
+    { "text": "1 COCA-COLA GR", "boundingBox": { "top": 0.478, "left": 0.05, "width": 0.5, "height": 0.011 } },
+    { "text": "1 SIN COMPLEMENTO", "boundingBox": { "top": 0.488, "left": 0.05, "width": 0.5, "height": 0.011 } },
+    { "text": "Total (incl IVA) 17.70", "boundingBox": { "top": 0.52, "left": 0.0, "width": 1.0, "height": 0.011 } },
+    { "text": "IVA 10.00% de 16.09EUR = 1.61", "boundingBox": { "top": 0.565, "left": 0.0, "width": 1.0, "height": 0.011 } }
+  ]
+}

@@ -5,7 +5,14 @@ import { ORDER_SOURCE, FULFILLMENT_TYPE, PAYMENT_METHOD } from '../taxonomy/cons
  * saber después con qué lógica se clasificó y reproyectar cuando cambie.
  * Súbela cada vez que cambie el comportamiento del motor.
  */
-export const RULES_VERSION = 1;
+export const RULES_VERSION = 2;
+
+/*
+ * Historial de versiones:
+ *  1 — versión inicial.
+ *  2 — descarta líneas de artículo («1 PATATAS GR») y dígitos pegados a letras
+ *      (código de encuesta «MJTHM6-…»), a partir del primer ticket real.
+ */
 
 /**
  * Dominio del número coleccionable.

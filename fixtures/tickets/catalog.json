@@ -58,7 +58,9 @@
         "source": "UNKNOWN",
         "fulfillment": "UNKNOWN",
         "payment": "UNKNOWN",
-        "mustNotDetect": ["4821"]
+        "mustNotDetect": [
+          "4821"
+        ]
       },
       "notes": "El código de recompensas de la app está impreso más grande que el número de pedido. Comprueba que el tamaño no gana a la etiqueta descalificadora."
     },
@@ -109,7 +111,9 @@
         "source": "UNKNOWN",
         "fulfillment": "TAKE_AWAY",
         "payment": "UNKNOWN",
-        "mustNotDetect": ["847291"]
+        "mustNotDetect": [
+          "847291"
+        ]
       },
       "notes": "La entrega sí es detectable por TAKE AWAY; el canal no. El número de ticket fiscal debe quedar excluido."
     },
@@ -162,6 +166,39 @@
         "payment": "UNKNOWN"
       },
       "notes": "Cuatro dígitos con ceros a la izquierda. La v1 lo guardaba como 090; ahora se conserva íntegro."
+    },
+    {
+      "id": "real-es-mahon-counter-004",
+      "file": null,
+      "ocrFixture": "real/es-mahon-counter-004.ocr.json",
+      "country": "ES",
+      "city": "Mahón",
+      "restaurant": "Mahón Poima",
+      "simulated": false,
+      "groundTruth": {
+        "rawNumber": "004",
+        "orderSource": "COUNTER",
+        "fulfillment": "UNKNOWN",
+        "paymentMethod": "UNKNOWN",
+        "observedTerminal": null,
+        "observedSequence": null,
+        "verifiedByUser": true
+      },
+      "expected": {
+        "rawNumber": "004",
+        "source": "COUNTER",
+        "fulfillment": "UNKNOWN",
+        "payment": "UNKNOWN",
+        "mustNotDetect": [
+          "1",
+          "6",
+          "37",
+          "4",
+          "579",
+          "0122200120209000022"
+        ]
+      },
+      "notes": "Primer ticket real (14/09/2022, caja). El número coleccionable es la cabecera grande en negativo «004», con relleno a 3 cifras. Abajo aparece «Num Pedido: 03» junto a «CAJA 1», que NO coincide con la cabecera: ver Docs/research/domain-findings.md §1.9. El terminal no se anota: «CAJA 1» es el puesto de cobro, no está demostrado que sea el terminal del número."
     }
   ]
 }

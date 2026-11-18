@@ -7,7 +7,7 @@ import {
   getConfidenceTier,
   isExcludedBlock,
 } from './engine.js';
-import { DEFAULT_DOMAIN, SOURCE_KEYWORDS, FULFILLMENT_KEYWORDS } from './rules.js';
+import { DEFAULT_DOMAIN, SOURCE_KEYWORDS, FULFILLMENT_KEYWORDS, RULES_VERSION } from './rules.js';
 import { ORDER_SOURCE, FULFILLMENT_TYPE } from '../taxonomy/constants.js';
 
 function block(text, { top = 0.5, height = 0.03, left = 0.1, width = 0.3 } = {}) {
@@ -49,6 +49,12 @@ describe('isExcludedBlock', () => {
   it('excluye el número de ticket fiscal y el código de la app', () => {
     expect(isExcludedBlock('N. TICKET 883021')).toBe(true);
     expect(isExcludedBlock('CODIGO 4821')).toBe(true);
+  });
+
+  it('excluye las líneas de artículo (cantidad + producto)', () => {
+    expect(isExcludedBlock('1 PATATAS GR')).toBe(true);
+    expect(isExcludedBlock('2 COCA-COLA GR')).toBe(true);
+    expect(isExcludedBlock('PEDIDO 156')).toBe(false);
   });
 
   it('no excluye un número de pedido suelto', () => {
@@ -173,7 +179,7 @@ describe('analyzeTicket', () => {
   it('registra la versión de reglas usada', () => {
     const result = analyzeTicket([block('2323', { top: 0.2 })]);
 
-    expect(result.evidence.rulesVersion).toBe(1);
+    expect(result.evidence.rulesVersion).toBe(RULES_VERSION);
   });
 });
 
@@ -183,5 +189,17 @@ describe('getConfidenceTier', () => {
     expect(getConfidenceTier(0.6)).toBe('medium');
     expect(getConfidenceTier(0.35)).toBe('low');
     expect(getConfidenceTier(0.1)).toBe('very_low');
+  });
+});
+
+describe('códigos alfanuméricos', () => {
+  it('ignora los dígitos del código de encuesta', () => {
+    const values = rankCandidates([{ text: 'MJTHM6-FMWCM-C37PP4' }]).map((c) => c.value);
+    expect(values).toEqual([]);
+  });
+
+  it('acepta el prefijo N o # delante del número', () => {
+    expect(rankCandidates([{ text: 'N123' }]).map((c) => c.value)).toEqual(['123']);
+    expect(rankCandidates([{ text: '#45' }]).map((c) => c.value)).toEqual(['45']);
   });
 });

@@ -137,6 +137,29 @@ Solo hay tres explicaciones posibles y son mutuamente excluyentes:
 
 **Resolver esto es la prioridad número uno del dataset.** Ver `Docs/research/hypothesis-validation.md`.
 
+### 1.9 `CONFIRMED` (un ticket) — Anatomía de un ticket real de caja en España
+
+Primer ticket real del dataset: Mahón, 14/09/2022, caja, ver
+`fixtures/tickets/real/es-mahon-counter-004.ocr.json`.
+
+- **El número coleccionable es la cabecera**: un bloque negro arriba del todo con el número
+  en grande y en negativo, `004`. Es lo que se canta en la recogida. Según el usuario, en
+  otros tickets la cabecera tiene 4 cifras (p. ej. `2546`) o una sola (`2`, `4`).
+- **Relleno a 3 cifras observado**: `004`. Refuerza la explicación 1 de §1.8 (el relleno
+  depende del dispositivo que imprime).
+- **Hay un segundo número de pedido que no coincide**: más abajo, «Num Pedido: 03» en la
+  línea de «CAJA 1- 14/09/2022 14:19:45». `03 ≠ 004`. Significado desconocido: puede ser un
+  contador propio de la caja o del turno. **El motor prioriza la cabecera** (tamaño y
+  posición) y no se ha cambiado para dar más peso a la etiqueta «Num Pedido».
+- **Contradice `terminal*100 + secuencia` para este restaurante**: cobrado en «CAJA 1»,
+  pero la cabecera es `004`, no `1xx`. Con un solo ticket no se descarta la hipótesis
+  (la caja de cobro puede no ser el terminal que numera), pero es la primera evidencia propia
+  en contra.
+- **Distractores confirmados**: código de encuesta alfanumérico de «única lectura»
+  (`MJTHM6-FMWCM-C37PP4`), número de factura simplificada de 19 cifras, CIF, cantidades de
+  artículo («1 PATATAS GR») e importes. Las reglas v2 descartan los dos que antes podían
+  colarse: cantidades de artículo y dígitos pegados a letras.
+
 ---
 
 ## 2. Tabla de formatos conocidos
@@ -146,7 +169,7 @@ Estado de cada formato observado. "Interpretación" es siempre hipótesis no apl
 | Formato | Ejemplos | Canal observado | Interpretación hipotética | Confianza |
 |---------|----------|-----------------|---------------------------|-----------|
 | 2 dígitos | `48`, `62` | Sin confirmar | terminal 0 + secuencia, o secuencia sola | `LOW` |
-| 3 dígitos con cero | `066` | Sin confirmar | terminal 0 + secuencia con relleno | `UNKNOWN` |
+| 3 dígitos con cero | `066`, `004` | Caja (`004`, ticket real §1.9) | relleno del dispositivo; no encaja con «CAJA 1» | `LOW` |
 | 3 dígitos | `253`, `352`, `634` | Caja (según Zhihu) | 1 dígito terminal + 2 secuencia | `MEDIUM` |
 | 4 dígitos | `1309`, `1342`, `2323`, `2523` | Kiosco (`2323` observado por el usuario) | 2 dígitos terminal + 2 secuencia | `MEDIUM` |
 | 6+ dígitos | — | — | Número de ticket fiscal, **no coleccionable** | `CONFIRMED` |

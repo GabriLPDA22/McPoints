@@ -198,9 +198,6 @@
     animation: scanDrift 2.4s ease-in-out infinite;
   }
 
-  .animate-splash-sweep {
-    animation: splashSweep 0.42s ease-in-out forwards;
-  }
 }
 
 @keyframes slideUp {
@@ -249,27 +246,6 @@
   }
 }
 
-@keyframes splashSweep {
-  0% {
-    transform: translateX(-120%);
-    opacity: 0;
-  }
-  15% {
-    opacity: 1;
-  }
-  50% {
-    transform: translateX(0%);
-    opacity: 1;
-  }
-  85% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(120%);
-    opacity: 0;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -277,5 +253,96 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Splash (src/app/SplashGate.jsx)                                     */
+/* Las transformaciones de SVG usan unidades del viewBox de 108.       */
+/* ------------------------------------------------------------------ */
+
+.splash-gate {
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.splash-gate[data-phase='fade-out'] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.splash-mark {
+  transition:
+    opacity 180ms ease-out,
+    transform 180ms ease-out;
+}
+
+.splash-gate[data-phase='mark-out'] .splash-mark,
+.splash-gate[data-phase='fade-out'] .splash-mark {
+  opacity: 0;
+  transform: scale(1.06);
+}
+
+.splash-mark .brand-brackets,
+.splash-mark .brand-ticket {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+}
+
+.splash-mark .brand-beam {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: brandBeam 520ms cubic-bezier(0.45, 0, 0.55, 1) 120ms forwards;
+}
+
+.splash-mark .brand-brackets {
+  animation: brandLock 280ms cubic-bezier(0.34, 1.56, 0.64, 1) 620ms both;
+}
+
+.splash-mark .brand-ticket {
+  animation: brandTicket 280ms cubic-bezier(0.34, 1.56, 0.64, 1) 640ms both;
+}
+
+@keyframes brandBeam {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(78px);
+  }
+}
+
+/* Las esquinas "enfocan" sobre el ticket y vuelven: lectura confirmada. */
+@keyframes brandLock {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+@keyframes brandTicket {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-mark .brand-beam,
+  .splash-mark .brand-brackets,
+  .splash-mark .brand-ticket {
+    animation: none;
   }
 }

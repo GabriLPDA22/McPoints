@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useAppStore } from '@/core/store/useAppStore.js';
+import { applyThemeBars } from '@/core/platform/systemBars.js';
 
 export function useTheme() {
   const preferences = useAppStore((s) => s.preferences);
@@ -13,6 +14,7 @@ export function useTheme() {
     // traducción fiel para quien prefiere oscuro, no una app distinta.
     const apply = (dark) => {
       root.classList.toggle('dark', dark);
+      applyThemeBars(dark);
     };
 
     if (theme === 'dark') {

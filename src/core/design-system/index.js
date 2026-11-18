@@ -6,6 +6,7 @@ export { EmptyState } from './EmptyState.jsx';
 export { Toast } from './Toast.jsx';
 export { Chip } from './Chip.jsx';
 export { TicketMark } from './TicketMark.jsx';
+export { BrandMark } from './BrandMark.jsx';
 export { TicketIllustration } from './TicketIllustration.jsx';
 export { KioskIcon } from './KioskIcon.jsx';
 export { CounterIcon } from './CounterIcon.jsx';

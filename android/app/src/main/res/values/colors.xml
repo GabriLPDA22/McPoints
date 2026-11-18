@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generado por scripts/generate-app-icons.mjs. La splash es de marca: mismo
+     rojo en claro y oscuro. -->
+<resources>
+    <color name="splash_background">#BC1E1E</color>
+</resources>

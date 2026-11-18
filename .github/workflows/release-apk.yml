@@ -36,9 +36,9 @@ jobs:
     env:
       TAG: ${{ github.event.inputs.tag || github.ref_name }}
     steps:
+      # En un push de tag, github.ref es el tag. Lanzado a mano, es la rama
+      # elegida en "Run workflow" y la release crea el tag sobre ese commit.
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.tag || github.ref }}
 
       - name: Comprobar que el tag coincide con la versión
         run: |
@@ -99,6 +99,7 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ env.TAG }}
+          target_commitish: ${{ github.sha }}
           name: McPoints ${{ env.VERSION }}
           body_path: ${{ env.NOTES }}
           files: McPoints-${{ env.VERSION }}.apk

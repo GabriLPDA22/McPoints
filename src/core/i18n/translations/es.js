@@ -140,6 +140,8 @@ export const es = {
     errorInvalidNumber: 'Ese número no es válido.',
     errorNoDetection: 'No detectamos un número. Prueba de nuevo o introdúcelo manualmente.',
     errorPermission: 'Permiso de cámara denegado. Actívalo en ajustes o usa entrada manual.',
+    errorCapture: 'La cámara no respondió. La hemos reiniciado: prueba otra vez.',
+    errorOcr: 'No se pudo leer el ticket. Si es la primera vez, espera unos segundos a que se prepare el lector y vuelve a intentarlo.',
     errorGeneric: 'Error al escanear. Introduce el número manualmente.',
     errorManualRange: (min, max) => `Introduce un número de ${min} a ${max} dígitos`,
   },

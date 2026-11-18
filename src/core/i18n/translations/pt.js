@@ -142,6 +142,8 @@ export const pt = {
     errorInvalidNumber: 'Esse número não é válido.',
     errorNoDetection: 'Não detetámos nenhum número. Tenta novamente ou introduz-o manualmente.',
     errorPermission: 'Permissão da câmara negada. Ativa-a nas definições ou usa a entrada manual.',
+    errorCapture: 'A câmara não respondeu. Reiniciámo-la: tenta outra vez.',
+    errorOcr: 'Não foi possível ler o talão. Se for a primeira vez, espera uns segundos até o leitor estar pronto e tenta de novo.',
     errorGeneric: 'Erro ao digitalizar. Introduz o número manualmente.',
     errorManualRange: (min, max) => `Introduz um número de ${min} a ${max} dígitos`,
   },

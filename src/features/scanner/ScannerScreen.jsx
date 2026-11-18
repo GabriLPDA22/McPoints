@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { X, Keyboard, Loader2, CameraOff } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
@@ -8,6 +8,7 @@ import {
   captureAndRecognize,
   captureFromPreview,
   ensureCameraPermission,
+  SCAN_ERROR,
   startCameraPreview,
   stopCameraPreview,
   triggerHaptic,
@@ -37,6 +38,12 @@ export function ScannerScreen() {
   // permiso; 'unavailable' en navegador o si el plugin falla, donde se recurre
   // a la cámara del sistema al pulsar el disparador.
   const [cameraState, setCameraState] = useState('starting');
+  // Incrementarlo fuerza a parar y volver a arrancar el preview: es la única
+  // forma de sacar al plugin nativo de un estado en el que ya no captura.
+  const [cameraSession, setCameraSession] = useState(0);
+  // Bloqueo síncrono contra dobles toques: `processing` es estado de React y
+  // no se ve hasta el siguiente render.
+  const scanningRef = useRef(false);
 
   // Desde Home, "Introducir manualmente" salta directo aquí sin pasar por
   // la cámara.
@@ -91,7 +98,7 @@ export function ScannerScreen() {
       document.body.classList.remove('camera-active');
       stopCameraPreview();
     };
-  }, [cameraVisible]);
+  }, [cameraVisible, cameraSession]);
 
   /**
    * Registra el avistamiento. El origen y la entrega vienen del contexto del
@@ -124,6 +131,8 @@ export function ScannerScreen() {
   );
 
   const handleScan = useCallback(async () => {
+    if (scanningRef.current) return;
+    scanningRef.current = true;
     setProcessing(true);
     setError('');
 
@@ -135,7 +144,6 @@ export function ScannerScreen() {
 
       if (scan.candidates.length === 0) {
         setError(t('scanner.errorNoDetection'));
-        setProcessing(false);
         return;
       }
 
@@ -151,12 +159,23 @@ export function ScannerScreen() {
         setAnalysis(scan);
       }
     } catch (e) {
-      setError(
-        e.message === 'PERMISSION_DENIED' ? t('scanner.errorPermission') : t('scanner.errorGeneric')
-      );
-    }
+      console.warn('Scan failed', e);
+      const code = e?.code ?? e?.message;
 
-    setProcessing(false);
+      if (code === SCAN_ERROR.PERMISSION_DENIED) {
+        setError(t('scanner.errorPermission'));
+      } else if (code === SCAN_ERROR.CAPTURE_FAILED) {
+        setError(t('scanner.errorCapture'));
+        if (cameraState === 'ready') setCameraSession((n) => n + 1);
+      } else if (code === SCAN_ERROR.OCR_FAILED) {
+        setError(t('scanner.errorOcr'));
+      } else {
+        setError(t('scanner.errorGeneric'));
+      }
+    } finally {
+      scanningRef.current = false;
+      setProcessing(false);
+    }
   }, [cameraState, domain, record, t]);
 
   const handleManualSubmit = async (e) => {
@@ -291,7 +310,7 @@ export function ScannerScreen() {
           <button
             type="button"
             onClick={handleScan}
-            disabled={processing || cameraDenied}
+            disabled={processing || cameraDenied || cameraState === 'starting'}
             aria-label={t('scanner.captureAria')}
             className="w-16 h-16 rounded-full bg-white flex items-center justify-center transition-transform duration-150 active:scale-95 disabled:opacity-40"
           >

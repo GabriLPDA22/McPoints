@@ -139,6 +139,8 @@ export const en = {
     errorInvalidNumber: "That number isn't valid.",
     errorNoDetection: "We couldn't detect a number. Try again or enter it manually.",
     errorPermission: 'Camera permission denied. Enable it in settings or use manual entry.',
+    errorCapture: "The camera didn't respond. We restarted it: try again.",
+    errorOcr: "Couldn't read the ticket. If this is the first time, wait a few seconds for the reader to get ready and try again.",
     errorGeneric: 'Error while scanning. Enter the number manually.',
     errorManualRange: (min, max) => `Enter a number with ${min} to ${max} digits`,
   },

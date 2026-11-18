@@ -5,6 +5,39 @@ import { DEFAULT_DOMAIN, DEFAULT_RULES } from '@/core/detection/rules.js';
 
 let MlKit = null;
 
+/**
+ * Límites de tiempo de cada paso nativo. Los plugins de cámara y OCR tienen
+ * caminos en los que la promesa nunca se resuelve (ver `captureFromPreview`),
+ * y sin un tope la pantalla se queda en "Procesando..." para siempre.
+ */
+const SNAPSHOT_TIMEOUT_MS = 4000;
+const CAPTURE_TIMEOUT_MS = 8000;
+const OCR_TIMEOUT_MS = 15000;
+
+export class ScanError extends Error {
+  constructor(code, cause) {
+    super(code);
+    this.name = 'ScanError';
+    this.code = code;
+    this.cause = cause;
+  }
+}
+
+export const SCAN_ERROR = Object.freeze({
+  PERMISSION_DENIED: 'PERMISSION_DENIED',
+  CAPTURE_FAILED: 'CAPTURE_FAILED',
+  OCR_FAILED: 'OCR_FAILED',
+});
+
+/** Rechaza con `ScanError(code)` si la promesa no termina a tiempo. */
+export function withTimeout(promise, ms, code) {
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new ScanError(code, new Error(`timeout ${ms}ms`))), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
+
 async function loadMlKit() {
   if (MlKit) return MlKit;
   if (!Capacitor.isNativePlatform()) return null;
@@ -88,21 +121,39 @@ export function flattenRecognition(result, size) {
   return { lines, hasGeometry };
 }
 
-/** Pasa una captura en base64 por el OCR y el motor de análisis. */
+/** Quita un posible prefijo `data:image/...;base64,`: ML Kit solo acepta el payload. */
+function stripDataUrl(base64) {
+  const comma = base64.indexOf(',');
+  return base64.startsWith('data:') && comma !== -1 ? base64.slice(comma + 1) : base64;
+}
+
+/**
+ * Pasa una captura en base64 por el OCR y el motor de análisis.
+ *
+ * Un fallo del OCR se propaga como `OCR_FAILED` en vez de tragarse: antes se
+ * convertía en "no detectamos un número", que culpa al encuadre de un problema
+ * que no es del usuario (p. ej. el modelo de Google Play aún descargándose).
+ */
 async function recognize(base64, format, domain, rules) {
   const mlkit = await loadMlKit();
   let lines = [];
   let hasGeometry = false;
 
   if (mlkit && base64) {
+    const payload = stripDataUrl(base64);
     try {
-      const [result, size] = await Promise.all([
-        mlkit.detectText({ base64Image: base64, rotation: 0 }),
-        readImageSize(base64, format),
-      ]);
+      const [result, size] = await withTimeout(
+        Promise.all([
+          mlkit.detectText({ base64Image: payload, rotation: 0 }),
+          readImageSize(payload, format),
+        ]),
+        OCR_TIMEOUT_MS,
+        SCAN_ERROR.OCR_FAILED
+      );
       ({ lines, hasGeometry } = flattenRecognition(result, size));
     } catch (e) {
       console.warn('ML Kit OCR failed', e);
+      throw e instanceof ScanError ? e : new ScanError(SCAN_ERROR.OCR_FAILED, e);
     }
   }
 
@@ -166,12 +217,56 @@ export async function stopCameraPreview() {
   }
 }
 
-/** Dispara sobre la vista previa ya activa, sin salir de la app. */
+/**
+ * Dispara sobre la vista previa ya activa, sin salir de la app.
+ *
+ * Se usa `captureSample` (un fotograma del propio preview) y no `capture`:
+ * en Android, `capture()` del plugin pasa por `Camera.takePicture()` y tiene
+ * varios caminos que nunca resuelven la promesa:
+ *  - `setParameters()` lanza en un hilo aparte en muchos dispositivos al fijar
+ *    tamaño/rotación de foto; la excepción se pierde y no se llama a nadie.
+ *  - el `catch (Exception)` del callback JPEG solo hace log.
+ *  - tras cualquiera de ellos `canTakePicture` queda en `false` y las capturas
+ *    siguientes hacen `return` sin resolver: la app "piensa" para siempre.
+ * El fotograma del preview ya viene rotado, a resolución de pantalla (de sobra
+ * para el OCR de un ticket) y es casi instantáneo.
+ *
+ * `capture()` queda solo como respaldo y con tope de tiempo. Si también falla,
+ * se lanza `CAPTURE_FAILED` y la pantalla reinicia el preview, que es lo único
+ * que devuelve el plugin a un estado sano.
+ */
 export async function captureFromPreview(domain = DEFAULT_DOMAIN, rules = DEFAULT_RULES) {
   const { CameraPreview } = await import('@capacitor-community/camera-preview');
-  const photo = await CameraPreview.capture({ quality: 90 });
 
-  return recognize(photo.value, 'jpeg', domain, rules);
+  let base64 = null;
+
+  try {
+    const sample = await withTimeout(
+      CameraPreview.captureSample({ quality: 90 }),
+      SNAPSHOT_TIMEOUT_MS,
+      SCAN_ERROR.CAPTURE_FAILED
+    );
+    base64 = sample?.value ?? null;
+  } catch (e) {
+    console.warn('captureSample failed, falling back to capture()', e);
+  }
+
+  if (!base64) {
+    try {
+      const photo = await withTimeout(
+        CameraPreview.capture({ quality: 85 }),
+        CAPTURE_TIMEOUT_MS,
+        SCAN_ERROR.CAPTURE_FAILED
+      );
+      base64 = photo?.value ?? null;
+    } catch (e) {
+      throw e instanceof ScanError ? e : new ScanError(SCAN_ERROR.CAPTURE_FAILED, e);
+    }
+  }
+
+  if (!base64) throw new ScanError(SCAN_ERROR.CAPTURE_FAILED);
+
+  return recognize(base64, 'jpeg', domain, rules);
 }
 
 /**
@@ -180,7 +275,7 @@ export async function captureFromPreview(domain = DEFAULT_DOMAIN, rules = DEFAUL
  */
 export async function captureAndRecognize(domain = DEFAULT_DOMAIN, rules = DEFAULT_RULES) {
   if (!(await ensureCameraPermission())) {
-    throw new Error('PERMISSION_DENIED');
+    throw new ScanError(SCAN_ERROR.PERMISSION_DENIED);
   }
 
   const image = await Camera.getPhoto({

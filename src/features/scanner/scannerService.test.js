@@ -7,7 +7,7 @@ vi.mock('@capacitor/camera', () => ({
   CameraSource: { Camera: 'CAMERA' },
 }));
 
-import { flattenRecognition } from './scannerService.js';
+import { flattenRecognition, withTimeout, ScanError, SCAN_ERROR } from './scannerService.js';
 
 const size = { width: 1000, height: 2000 };
 
@@ -78,5 +78,29 @@ describe('flattenRecognition', () => {
 
     expect(lines.map((l) => l.text)).toEqual(['PEDIDO', '2323']);
     expect(hasGeometry).toBe(false);
+  });
+});
+
+describe('withTimeout', () => {
+  it('devuelve el valor si la promesa termina a tiempo', async () => {
+    await expect(withTimeout(Promise.resolve(42), 50, SCAN_ERROR.OCR_FAILED)).resolves.toBe(42);
+  });
+
+  it('rechaza con ScanError y su código si la promesa nunca se resuelve', async () => {
+    vi.useFakeTimers();
+    const pending = withTimeout(new Promise(() => {}), 1000, SCAN_ERROR.CAPTURE_FAILED);
+    const assertion = expect(pending).rejects.toMatchObject({
+      name: 'ScanError',
+      code: SCAN_ERROR.CAPTURE_FAILED,
+    });
+    vi.advanceTimersByTime(1000);
+    await assertion;
+    vi.useRealTimers();
+  });
+
+  it('propaga el error original si la promesa falla antes del tope', async () => {
+    const boom = new Error('boom');
+    await expect(withTimeout(Promise.reject(boom), 50, SCAN_ERROR.OCR_FAILED)).rejects.toBe(boom);
+    expect(boom).not.toBeInstanceOf(ScanError);
   });
 });

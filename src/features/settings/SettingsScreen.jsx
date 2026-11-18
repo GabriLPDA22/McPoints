@@ -6,25 +6,16 @@ import {
   Info,
   Palette,
   Languages,
-  ChevronRight,
   FlaskConical,
   Check,
 } from 'lucide-react';
 import { useAppStore } from '@/core/store/useAppStore.js';
 import { useTheme } from '@/core/hooks/useTheme.js';
-import { Button, BottomSheet, Toast, TicketMark, Flag } from '@/core/design-system';
+import { Button, BottomSheet, Toast, Flag, Masthead, Paper, PaperHeader, Rule, Barcode } from '@/core/design-system';
+import { saveJsonFile } from '@/core/platform/saveJsonFile.js';
 import { buildDatasetExport } from '@/core/dataset/export.js';
 import { useTranslation } from '@/core/i18n/useTranslation.js';
-
-function downloadJson(data, filename) {
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
+import { localDayKey } from '@/core/storage/insights.js';
 
 // Los nombres de idioma se muestran siempre en el propio idioma (no se
 // traducen): así se reconocen aunque la app esté en un idioma que no
@@ -40,7 +31,6 @@ function SettingsRow({
   label,
   value,
   valueFlag,
-  danger = false,
   disabled = false,
   onClick,
   as = 'button',
@@ -52,26 +42,27 @@ function SettingsRow({
     <Tag
       {...(as === 'label' ? { htmlFor } : { type: 'button', disabled })}
       onClick={onClick}
-      className={`w-full flex items-center gap-3 py-3.5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm ${
-        danger ? 'text-danger' : 'text-ink'
-      } ${disabled ? 'opacity-40 pointer-events-none' : ''}`}
+      className={`flex min-h-[48px] w-full cursor-pointer items-center gap-3 text-left text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm ${
+        disabled ? 'pointer-events-none opacity-40' : ''
+      }`}
     >
-      <Icon className="w-[18px] h-[18px] flex-shrink-0" strokeWidth={1.75} aria-hidden />
-      <span className="flex-1 text-sm font-medium">{label}</span>
-      {valueFlag && <Flag code={valueFlag} className="w-5 h-[13.3px]" />}
-      {value && <span className="text-sm text-muted">{value}</span>}
-      <ChevronRight className="w-4 h-4 text-muted/60 flex-shrink-0" aria-hidden />
+      <Icon className="h-[19px] w-[19px] flex-shrink-0" strokeWidth={1.9} aria-hidden />
+      <span className="text-[15px] font-medium">{label}</span>
+      <span className="leader" aria-hidden />
+      {valueFlag && <Flag code={valueFlag} className="h-[13.3px] w-5" />}
+      <span className="font-mono text-[13px] font-semibold uppercase tracking-[0.06em]">{value ?? '→'}</span>
       {children}
     </Tag>
   );
 }
 
-function SettingsSection({ title, children }) {
+function SettingsGroup({ title, first = false, children }) {
   return (
-    <section>
-      <h2 className="text-label text-muted mb-1 px-1">{title}</h2>
-      <div className="divide-y divide-border">{children}</div>
-    </section>
+    <div className={first ? '' : 'mt-5'}>
+      <PaperHeader title={title} />
+      <Rule className="mb-1 mt-3" />
+      {children}
+    </div>
   );
 }
 
@@ -102,17 +93,23 @@ export function SettingsScreen() {
     showToast._t = window.setTimeout(() => setToast((t) => ({ ...t, visible: false })), 2600);
   };
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = localDayKey(new Date());
 
-  const handleExport = () => {
-    downloadJson(exportCollection(), `mcpoints_backup_${today}.json`);
-    showToast(t('settings.toastExported'), 'success');
+  const exportFile = async (data, filename, successMessage) => {
+    try {
+      const result = await saveJsonFile(data, filename, { dialogTitle: t('settings.exportDialogTitle') });
+      if (result !== 'cancelled') showToast(successMessage, 'success');
+    } catch (e) {
+      console.error('Export failed', e);
+      showToast(t('settings.toastExportFailed'), 'error');
+    }
   };
 
-  const handleDatasetExport = () => {
-    downloadJson(buildDatasetExport(sightings), `mcpoints_dataset_${today}.json`);
-    showToast(t('settings.toastDatasetExported'), 'success');
-  };
+  const handleExport = () =>
+    exportFile(exportCollection(), `mcpoints_backup_${today}.json`, t('settings.toastExported'));
+
+  const handleDatasetExport = () =>
+    exportFile(buildDatasetExport(sightings), `mcpoints_dataset_${today}.json`, t('settings.toastDatasetExported'));
 
   const handleImport = (e) => {
     const file = e.target.files?.[0];
@@ -132,14 +129,11 @@ export function SettingsScreen() {
   };
 
   return (
-    <div className="screen-padding pb-8 screen-fill flex flex-col">
-      <header className="flex items-center gap-2 pt-1 flex-shrink-0">
-        <TicketMark className="w-6 h-6 text-accent" strokeWidth={7} />
-        <h1 className="text-heading-lg text-ink">{t('settings.title')}</h1>
-      </header>
+    <div className="screen-padding pb-6">
+      <Masthead title={t('settings.title')} />
 
-      <div className="space-y-7 mt-7">
-        <SettingsSection title={t('settings.appearance')}>
+      <Paper torn className="px-5 pb-5 pt-5">
+        <SettingsGroup title={t('settings.appearance')} first>
           <SettingsRow
             icon={Palette}
             label={t('settings.theme')}
@@ -149,22 +143,16 @@ export function SettingsScreen() {
           <SettingsRow
             icon={Languages}
             label={t('settings.language')}
-            value={currentLanguage.name}
+            value={currentLanguage.value}
             valueFlag={currentLanguage.flag}
             onClick={() => setLanguageSheetOpen(true)}
           />
-        </SettingsSection>
+        </SettingsGroup>
 
-        <SettingsSection title={t('settings.data')}>
+        <SettingsGroup title={t('settings.data')}>
           <SettingsRow icon={Download} label={t('settings.exportCollection')} onClick={handleExport} />
           <SettingsRow as="label" htmlFor="import-input" icon={Upload} label={t('settings.importCollection')}>
-            <input
-              id="import-input"
-              type="file"
-              accept=".json"
-              className="hidden"
-              onChange={handleImport}
-            />
+            <input id="import-input" type="file" accept=".json,application/json" className="hidden" onChange={handleImport} />
           </SettingsRow>
           <SettingsRow
             icon={FlaskConical}
@@ -172,50 +160,48 @@ export function SettingsScreen() {
             disabled={sightings.length === 0}
             onClick={handleDatasetExport}
           />
-        </SettingsSection>
+        </SettingsGroup>
 
-        <section>
-          <h2 className="text-label text-muted mb-1 px-1">{t('settings.dangerZone')}</h2>
-          {!confirmReset ? (
-            <div className="divide-y divide-border">
-              <SettingsRow
-                icon={Trash2}
-                label={t('settings.resetCollection')}
-                danger
-                onClick={() => setConfirmReset(true)}
-              />
-            </div>
-          ) : (
-            <div className="space-y-3 py-3">
-              <p className="text-sm text-ink">{t('settings.resetConfirm')}</p>
-              <div className="flex gap-2">
-                <Button variant="secondary" className="flex-1" onClick={() => setConfirmReset(false)}>
-                  {t('common.cancel')}
-                </Button>
-                <Button
-                  variant="destructive"
-                  className="flex-1"
-                  onClick={async () => {
-                    await resetCollection();
-                    setConfirmReset(false);
-                    showToast(t('settings.toastReset'), 'info');
-                  }}
-                >
-                  {t('common.confirm')}
-                </Button>
-              </div>
-            </div>
-          )}
-        </section>
+        <SettingsGroup title={t('settings.about')}>
+          <SettingsRow icon={Info} label="McPoints" value={`v${__APP_VERSION__}`} onClick={() => setAboutSheetOpen(true)} />
+        </SettingsGroup>
 
-        <SettingsSection title={t('settings.about')}>
-          <SettingsRow icon={Info} label={t('settings.aboutMcPoints')} onClick={() => setAboutSheetOpen(true)} />
-        </SettingsSection>
+        <Rule className="my-4" />
+        <Barcode value={__APP_VERSION__} height={26} caption={t('settings.thanks')} />
+      </Paper>
+
+      <div className="mt-6">
+        {!confirmReset ? (
+          <button
+            type="button"
+            onClick={() => setConfirmReset(true)}
+            className="flex h-[52px] w-full items-center justify-center gap-2 rounded-[12px] border-2 border-danger text-[15px] font-semibold text-danger focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          >
+            <Trash2 className="h-[18px] w-[18px]" strokeWidth={2} aria-hidden />
+            {t('settings.resetCollection')}
+          </button>
+        ) : (
+          <div className="space-y-3 rounded-[12px] border-2 border-danger p-4">
+            <p className="text-sm text-ink">{t('settings.resetConfirm')}</p>
+            <div className="flex gap-2">
+              <Button variant="secondary" className="flex-1" onClick={() => setConfirmReset(false)}>
+                {t('common.cancel')}
+              </Button>
+              <Button
+                variant="destructive"
+                className="flex-1"
+                onClick={async () => {
+                  await resetCollection();
+                  setConfirmReset(false);
+                  showToast(t('settings.toastReset'), 'info');
+                }}
+              >
+                {t('common.confirm')}
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
-
-      <p className="text-center text-xs text-muted mt-auto pt-8 flex-shrink-0">
-        McPoints v{__APP_VERSION__}
-      </p>
 
       <BottomSheet
         open={themeSheetOpen}

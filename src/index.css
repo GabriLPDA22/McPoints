@@ -6,46 +6,49 @@
   /*
    * Tokens en canal RGB (space-separated) para que Tailwind pueda aplicar
    * modificadores de opacidad (bg-accent/15, etc.) sobre variables CSS.
-   * :root = identidad clara (principal, "El Recibo"). .dark = variante oscura,
-   * traducción fiel del mismo lenguaje, no una segunda personalidad.
+   *
+   * Dirección «Recibo» (2.1): papel térmico sobre fondo crema, tinta casi
+   * negra y el rojo de marca como único color de acento. `surface` es el
+   * papel del ticket; `bg`, la mesa sobre la que está.
+   * Contrastes AA comprobados: muted sobre bg y surface ≥ 4.5:1, accent como
+   * texto sobre bg ≥ 4.5:1 en claro y oscuro.
    */
   :root {
-    --bg: 250 250 248;
-    --surface: 255 255 255;
-    --surface-raised: 241 238 232;
-    --border: 231 227 217;
-    --text: 28 25 23;
-    --text-muted: 110 101 90;
-    --text-subtle: 167 156 140;
-    --primary: 229 67 53;
-    --primary-strong: 198 54 38;
+    --bg: 238 233 223;
+    --surface: 255 253 248;
+    --surface-raised: 229 223 211;
+    --border: 205 197 184;
+    --text: 22 20 18;
+    --text-muted: 108 99 87;
+    --text-subtle: 160 150 136;
+    --primary: 212 42 34;
+    --primary-strong: 163 18 26;
     --on-primary: 255 255 255;
     --gold: 214 161 37;
-    /* Variante de texto: el dorado decorativo (--gold) no llega a 4.5:1 sobre
-       blanco. Para copy real (deltas, titulares) se usa este tono más oscuro
-       que conserva el matiz dorado pero cumple contraste AA. */
+    /* Variante de texto del dorado: --gold no llega a 4.5:1 sobre papel. */
     --gold-ink: 156 107 18;
     --success: 46 139 87;
-    --danger: 198 54 42;
+    --danger: 198 40 32;
     --safe-bottom: env(safe-area-inset-bottom, 0px);
+    /* Alto reservado para el dock flotante (64) + su margen inferior (20) + aire. */
+    --dock-space: calc(104px + var(--safe-bottom));
   }
 
   .dark {
-    --bg: 20 19 19;
-    --surface: 28 27 25;
+    --bg: 14 13 12;
+    --surface: 30 28 25;
     --surface-raised: 42 40 37;
-    --border: 46 44 40;
-    --text: 245 241 233;
-    --text-muted: 167 158 144;
-    --text-subtle: 116 106 92;
-    --primary: 255 90 70;
-    --primary-strong: 229 87 63;
+    --border: 62 58 52;
+    --text: 240 234 222;
+    --text-muted: 150 141 128;
+    --text-subtle: 110 102 92;
+    --primary: 230 62 48;
+    --primary-strong: 200 44 34;
     --on-primary: 255 255 255;
     --gold: 232 184 75;
-    /* En oscuro el dorado decorativo ya cumple contraste de sobra como texto. */
     --gold-ink: 232 184 75;
     --success: 76 175 110;
-    --danger: 229 86 74;
+    --danger: 236 84 70;
   }
 
   html {
@@ -76,7 +79,7 @@
 @layer components {
   .app-shell {
     @apply flex flex-col min-h-dvh max-w-lg mx-auto;
-    padding-bottom: calc(80px + var(--safe-bottom));
+    padding-bottom: var(--dock-space);
   }
 
   .screen-padding {
@@ -89,7 +92,7 @@
      una franja muerta debajo — el mismo "choque" entre pantallas que aparece
      si cada una define su propio alto a mano. */
   .screen-fill {
-    min-height: calc(100dvh - 80px - var(--safe-bottom));
+    min-height: calc(100dvh - var(--dock-space));
   }
 
   .tabular-nums {
@@ -100,7 +103,7 @@
      Se conserva el nombre de clase por compatibilidad con las pantallas
      existentes; ya no referencia ninguna serif. */
   .font-display {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Inter Variable', 'Inter', system-ui, sans-serif;
     font-weight: 600;
   }
 
@@ -172,6 +175,74 @@
     @apply font-mono font-medium tabular-nums;
     font-size: 16px;
     line-height: 1.2;
+  }
+
+  /* ---------------- Primitivas «Recibo» ---------------- */
+
+  /* Etiqueta de sección: mono, mayúsculas, muy espaciada. */
+  .text-receipt {
+    @apply font-mono font-semibold uppercase;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.14em;
+  }
+
+  .text-receipt-sm {
+    @apply font-mono font-medium uppercase;
+    font-size: 11.5px;
+    line-height: 14px;
+    letter-spacing: 0.06em;
+  }
+
+  /* Título de pantalla. */
+  .text-masthead {
+    @apply font-mono font-semibold uppercase text-ink;
+    font-size: 26px;
+    line-height: 30px;
+    letter-spacing: 0.06em;
+  }
+
+  /* Papel de ticket con borde inferior troquelado (zigzag). */
+  .paper {
+    position: relative;
+    background: rgb(var(--surface));
+    border-radius: 4px 4px 0 0;
+    box-shadow:
+      0 1px 0 rgb(var(--border)),
+      0 12px 28px -20px rgb(0 0 0 / 0.45);
+  }
+
+  .paper-torn {
+    margin-bottom: 10px;
+  }
+
+  .paper-torn::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -10px;
+    height: 10px;
+    background:
+      linear-gradient(-45deg, transparent 7px, rgb(var(--surface)) 0) 0 0 / 14px 10px repeat-x,
+      linear-gradient(45deg, transparent 7px, rgb(var(--surface)) 0) 0 0 / 14px 10px repeat-x;
+  }
+
+  .rule-dashed {
+    border-top: 1.5px dashed rgb(var(--border));
+  }
+
+  .rule-double {
+    border-top: 4px double rgb(var(--text) / 0.8);
+  }
+
+  /* Fila clave ........ valor con puntos guía. */
+  .leader {
+    flex: 1;
+    min-width: 12px;
+    border-bottom: 1.5px dotted rgb(var(--border));
+    transform: translateY(-4px);
+    align-self: flex-end;
   }
 
   /* Muesca de esquina tipo ticket: corta la esquina superior derecha en

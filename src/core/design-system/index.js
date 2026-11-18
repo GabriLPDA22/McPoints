@@ -14,3 +14,16 @@ export { Flag } from './Flag.jsx';
 export { TaxonomyBadge } from './TaxonomyBadge.jsx';
 export { DiscoveryCell } from './DiscoveryCell.jsx';
 export { SourceChecklist } from './SourceChecklist.jsx';
+export {
+  Paper,
+  Rule,
+  PaperHeader,
+  KeyValue,
+  SectionLabel,
+  Barcode,
+  RubberStamp,
+  StampTag,
+  InkTag,
+  DotMatrixBar,
+} from './Receipt.jsx';
+export { Masthead, MastheadButton } from './Masthead.jsx';

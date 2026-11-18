@@ -13,8 +13,8 @@ import { Capacitor } from '@capacitor/core';
  */
 
 const THEME_BAR = Object.freeze({
-  light: { color: '#FAFAF8', style: 'LIGHT' }, // iconos oscuros
-  dark: { color: '#141313', style: 'DARK' }, // iconos claros
+  light: { color: '#EEE9DF', style: 'LIGHT' }, // iconos oscuros
+  dark: { color: '#0E0D0C', style: 'DARK' }, // iconos claros
 });
 
 let splashActive = true;

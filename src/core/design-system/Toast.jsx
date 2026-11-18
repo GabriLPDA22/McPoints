@@ -14,11 +14,12 @@ export function Toast({ message, type = 'success', visible }) {
   return (
     <div
       role="status"
-      className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] max-w-[92%] animate-slide-up"
+      style={{ bottom: 'calc(var(--dock-space) + 8px)' }}
+      className="fixed left-1/2 -translate-x-1/2 z-[60] max-w-[92%] animate-slide-up"
     >
-      <div className="flex items-center gap-2.5 pl-3.5 pr-4 py-3 rounded-full bg-raised shadow-soft">
+      <div className="flex items-center gap-2.5 pl-3.5 pr-4 py-3 rounded-full bg-ink shadow-soft">
         <Icon className={`w-4 h-4 flex-shrink-0 ${tone}`} />
-        <span className="text-sm font-medium text-ink">{message}</span>
+        <span className="text-sm font-medium text-bg">{message}</span>
       </div>
     </div>
   );

@@ -1,84 +1,75 @@
 import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Clock } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/core/store/useAppStore.js';
-import { EmptyState, Chip, TicketMark } from '@/core/design-system';
+import { EmptyState, Masthead, Paper, PaperHeader, Rule, KeyValue } from '@/core/design-system';
 import { getSourceMeta } from '@/core/taxonomy/registry.js';
 import { collectionKeyFor } from '@/core/storage/projector.js';
+import { classifySightings, localDayKey, SIGHTING_KIND } from '@/core/storage/insights.js';
 import { ORDER_SOURCE } from '@/core/taxonomy/constants.js';
 import { useTranslation } from '@/core/i18n/useTranslation.js';
 
+const FILTER_IDS = ['all', 'classified', 'unclassified'];
+
 export function HistoryScreen() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
   const sightings = useAppStore((s) => s.sightings);
-  const entries = useAppStore((s) => s.entries);
   const projection = useAppStore((s) => s.getProjection());
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState(() =>
+    FILTER_IDS.includes(location.state?.filter) ? location.state.filter : 'all'
+  );
 
-  const FILTERS = [
-    { id: 'all', label: t('history.filterAll') },
-    { id: 'classified', label: t('history.filterClassified') },
-    { id: 'unclassified', label: t('history.filterUnclassified') },
-  ];
+  const filterLabels = {
+    all: t('history.filterAll'),
+    classified: t('history.filterClassified'),
+    unclassified: t('history.filterUnclassified'),
+  };
 
-  function groupLabel(day) {
-    const today = new Date().toISOString().slice(0, 10);
-    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-    if (day === today) return t('history.today');
-    if (day === yesterday) return t('history.yesterday');
-    return new Date(`${day}T12:00:00`).toLocaleDateString(t('locale'), {
-      day: 'numeric',
-      month: 'long',
-    });
-  }
-
-  const firstSightingIds = useMemo(() => {
-    const ids = new Set();
-    for (const entry of Object.values(entries)) {
-      if (entry.sightingIds[0]) ids.add(entry.sightingIds[0]);
-    }
-    return ids;
-  }, [entries]);
+  const kinds = useMemo(
+    () => classifySightings(sightings, projection.keyStrategy),
+    [sightings, projection.keyStrategy]
+  );
 
   const grouped = useMemo(() => {
-    const filtered = sightings.filter((sighting) => {
-      const known = sighting.source.value !== ORDER_SOURCE.UNKNOWN;
-      if (filter === 'classified') return known;
-      if (filter === 'unclassified') return !known;
-      return true;
-    });
-
     const groups = {};
-    for (const sighting of filtered) {
-      const day = sighting.capturedAt.slice(0, 10);
-      (groups[day] ??= []).push(sighting);
+    for (const sighting of sightings) {
+      const known = sighting.source.value !== ORDER_SOURCE.UNKNOWN;
+      if (filter === 'classified' && !known) continue;
+      if (filter === 'unclassified' && known) continue;
+      (groups[localDayKey(sighting.capturedAt)] ??= []).push(sighting);
     }
-
     return Object.entries(groups)
       .sort(([a], [b]) => b.localeCompare(a))
-      .map(([day, items]) => [
-        day,
-        [...items].sort((a, b) => b.capturedAt.localeCompare(a.capturedAt)),
-      ]);
+      .map(([day, items]) => [day, [...items].sort((a, b) => b.capturedAt.localeCompare(a.capturedAt))]);
   }, [sightings, filter]);
+
+  const weekNew = useMemo(() => {
+    const since = Date.now() - 7 * 86400000;
+    return sightings.filter(
+      (s) => kinds.get(s.id) === SIGHTING_KIND.NEW && new Date(s.capturedAt).getTime() >= since
+    ).length;
+  }, [sightings, kinds]);
+
+  function dayLabel(day) {
+    const today = localDayKey(new Date());
+    const yesterday = localDayKey(Date.now() - 86400000);
+    const date = new Date(`${day}T12:00:00`);
+    const weekday = date.toLocaleDateString(t('locale'), { weekday: 'short', day: 'numeric', month: 'short' });
+    if (day === today) return `${t('history.today')} · ${weekday}`;
+    if (day === yesterday) return `${t('history.yesterday')} · ${weekday}`;
+    return weekday;
+  }
+
+  const time = (iso) =>
+    new Date(iso).toLocaleTimeString(t('locale'), { hour: '2-digit', minute: '2-digit' });
 
   if (sightings.length === 0) {
     return (
       <div className="screen-padding screen-fill flex flex-col">
-        <header className="flex items-center gap-2 pt-1 mb-6 flex-shrink-0">
-          <TicketMark className="w-6 h-6 text-accent" strokeWidth={7} />
-          <h1 className="text-heading-lg text-ink">{t('history.title')}</h1>
-        </header>
-        <div className="flex-1 flex items-center justify-center">
-          <EmptyState
-            icon={Clock}
-            iconClassName="w-[5.5rem] h-[5.5rem] text-ink/70"
-            iconStrokeWidth={1.75}
-            iconProps={{ absoluteStrokeWidth: true }}
-            title={t('history.emptyTitle')}
-            description={t('history.emptyDescription')}
-          />
+        <Masthead title={t('history.title')} />
+        <div className="flex flex-1 items-center justify-center">
+          <EmptyState title={t('history.emptyTitle')} description={t('history.emptyDescription')} />
         </div>
       </div>
     );
@@ -86,55 +77,65 @@ export function HistoryScreen() {
 
   return (
     <div className="screen-padding pb-6">
-      <header className="flex items-center gap-2 pt-1 mb-5">
-        <TicketMark className="w-6 h-6 text-accent" strokeWidth={7} />
-        <h1 className="text-heading-lg text-ink">{t('history.title')}</h1>
-      </header>
+      <Masthead title={t('history.title')} />
 
-      <div className="flex gap-2 mb-5 flex-wrap">
-        {FILTERS.map(({ id, label }) => (
-          <Chip key={id} active={filter === id} onClick={() => setFilter(id)}>
-            {label}
-          </Chip>
+      <div className="mb-4 flex gap-5 px-1" role="tablist">
+        {FILTER_IDS.map((id) => (
+          <button
+            key={id}
+            type="button"
+            role="tab"
+            aria-selected={filter === id}
+            onClick={() => setFilter(id)}
+            className={`pb-1 text-receipt focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+              filter === id ? 'border-b-[2.5px] border-accent text-ink' : 'text-muted'
+            }`}
+          >
+            {filterLabels[id]}
+          </button>
         ))}
       </div>
 
-      <div className="space-y-5">
-        {grouped.map(([day, items]) => (
-          <div key={day}>
-            <p className="text-label text-muted mb-1">{groupLabel(day)}</p>
+      <Paper torn className="px-5 pb-4 pt-5">
+        <PaperHeader title={t('history.receiptTitle')} aside={t('history.scanCount', sightings.length)} />
+        <Rule variant="double" className="my-3" />
 
-            <ul className="divide-y divide-border">
+        {grouped.length === 0 && <p className="py-6 text-center text-sm text-muted">{t('history.noneForFilter')}</p>}
+
+        {grouped.map(([day, items], gi) => (
+          <div key={day}>
+            {gi > 0 && <Rule className="my-3" />}
+            <div className="mb-1.5 flex justify-between text-receipt-sm font-semibold text-muted">
+              <span>{dayLabel(day)}</span>
+              <span>{t('history.scanCount', items.length)}</span>
+            </div>
+            <ul>
               {items.map((sighting) => {
                 const meta = getSourceMeta(sighting.source.value, t);
-                const Icon = meta.icon;
-                const isNew = firstSightingIds.has(sighting.id);
-
+                const unknown = sighting.source.value === ORDER_SOURCE.UNKNOWN;
+                const kind = kinds.get(sighting.id);
                 return (
                   <li key={sighting.id}>
                     <button
                       type="button"
-                      onClick={() =>
-                        navigate(`/number/${collectionKeyFor(sighting, projection.keyStrategy)}`)
-                      }
-                      className="w-full flex items-center gap-3 py-3 text-left hover:bg-accent/5 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
+                      onClick={() => navigate(`/number/${collectionKeyFor(sighting, projection.keyStrategy)}`)}
+                      className="grid w-full grid-cols-[50px_60px_1fr_auto] items-center py-1.5 text-left font-mono text-[14px] text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-sm"
                     >
-                      <span className="text-number-sm text-ink flex-shrink-0 w-16">
-                        {sighting.rawNumber}
+                      <span className="text-muted tabular-nums">{time(sighting.capturedAt)}</span>
+                      <b className="text-[18px] font-semibold tabular-nums">{sighting.rawNumber}</b>
+                      <span className="truncate text-[12px] uppercase tracking-[0.08em]">
+                        {unknown ? '—' : meta.shortLabel}
                       </span>
-                      <Icon className="w-4 h-4 text-muted flex-shrink-0" strokeWidth={1.75} aria-hidden />
-                      <span className="flex-1 min-w-0 text-sm text-ink truncate">{meta.label}</span>
-                      {isNew && (
-                        <span className="text-xs font-semibold text-accent flex-shrink-0">
-                          {t('history.newBadge')}
-                        </span>
+                      {kind === SIGHTING_KIND.NEW && (
+                        <em className="rounded-[3px] bg-accent px-1.5 py-0.5 text-[11px] font-semibold not-italic uppercase tracking-[0.06em] text-on-accent">
+                          ★ {t('history.newBadge')}
+                        </em>
                       )}
-                      <span className="text-xs text-muted tabular-nums flex-shrink-0">
-                        {new Date(sighting.capturedAt).toLocaleTimeString(t('locale'), {
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </span>
+                      {kind === SIGHTING_KIND.NEW_SOURCE && (
+                        <em className="rounded-[3px] border-[1.5px] border-gold-ink px-1.5 py-[1px] text-[11px] font-semibold not-italic uppercase tracking-[0.06em] text-gold-ink">
+                          + {t('history.newSourceBadge')}
+                        </em>
+                      )}
                     </button>
                   </li>
                 );
@@ -142,7 +143,10 @@ export function HistoryScreen() {
             </ul>
           </div>
         ))}
-      </div>
+
+        <Rule className="my-3" />
+        <KeyValue label={t('history.weekTotal')} value={t('history.weekNew', weekNew)} />
+      </Paper>
     </div>
   );
 }

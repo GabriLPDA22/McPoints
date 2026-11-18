@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import {
   BRACKETS,
   BRACKET_STROKE,
@@ -17,22 +18,36 @@ import {
  * `animated` añade la línea de escaneo y los ganchos de clase que anima la
  * splash (`brand-beam`, `brand-brackets`, `brand-ticket`, ver index.css).
  */
-export function BrandMark({ size = 288, animated = false, className = '' }) {
+/**
+ * `crop` recorta el lienzo de 108 al contenido (26..82) para usar la marca
+ * como logotipo pequeño; sin recorte mantiene la geometría de la splash.
+ * `color`/`lineColor` permiten pintarla con la tinta del tema (currentColor).
+ */
+export function BrandMark({
+  size = 288,
+  animated = false,
+  crop = false,
+  color = BRAND_COLORS.stroke,
+  lineColor = BRAND_COLORS.lines,
+  className = '',
+}) {
+  // Id único: la splash y el estado vacío pueden convivir montados.
+  const glowId = `brand-beam-glow-${useId().replace(/:/g, '')}`;
   return (
     <svg
       width={size}
       height={size}
-      viewBox={`0 0 ${BRAND_VIEWBOX} ${BRAND_VIEWBOX}`}
+      viewBox={crop ? '26 26 56 56' : `0 0 ${BRAND_VIEWBOX} ${BRAND_VIEWBOX}`}
       fill="none"
       className={className}
       aria-hidden
     >
       {animated && (
         <defs>
-          <linearGradient id="brand-beam-glow" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#FFFFFF" stopOpacity="0" />
-            <stop offset="0.5" stopColor="#FFFFFF" stopOpacity="0.35" />
-            <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
+          <linearGradient id={glowId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor={color} stopOpacity="0" />
+            <stop offset="0.5" stopColor={color} stopOpacity="0.35" />
+            <stop offset="1" stopColor={color} stopOpacity="0" />
           </linearGradient>
         </defs>
       )}
@@ -42,7 +57,7 @@ export function BrandMark({ size = 288, animated = false, className = '' }) {
           <path
             key={d}
             d={d}
-            stroke={BRAND_COLORS.stroke}
+            stroke={color}
             strokeWidth={BRACKET_STROKE}
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -53,7 +68,7 @@ export function BrandMark({ size = 288, animated = false, className = '' }) {
       <g className="brand-ticket">
         <path
           d={TICKET}
-          stroke={BRAND_COLORS.stroke}
+          stroke={color}
           strokeWidth={TICKET_STROKE}
           strokeLinejoin="round"
         />
@@ -64,7 +79,7 @@ export function BrandMark({ size = 288, animated = false, className = '' }) {
             y1={y1}
             x2={x2}
             y2={y2}
-            stroke={BRAND_COLORS.lines}
+            stroke={lineColor}
             strokeWidth={LINE_STROKE}
             strokeLinecap="round"
           />
@@ -79,14 +94,14 @@ export function BrandMark({ size = 288, animated = false, className = '' }) {
             y={-5}
             width={FRAME.right - FRAME.left + 8}
             height={10}
-            fill="url(#brand-beam-glow)"
+            fill={`url(#${glowId})`}
           />
           <line
             x1={FRAME.left - 4}
             x2={FRAME.right + 4}
             y1={0}
             y2={0}
-            stroke="#FFFFFF"
+            stroke={color}
             strokeWidth={1.4}
             strokeLinecap="round"
           />
